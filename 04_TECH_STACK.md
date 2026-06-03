@@ -73,6 +73,8 @@ Both are built on **HeroUI** so they share a design language, tokens, and compon
 | Edge Functions | **Supabase Edge Functions (Deno)** | Serverless functions for notification dispatch, cron jobs (expiry checks), admin operations |
 | File Storage | **Supabase Storage** | Profile photos. S3-compatible, integrated with RLS |
 
+**Project configuration** (see the [[2026-06-03-supabase-project-config]] decision): region **Sydney (`ap-southeast-2`)** for AU latency + data residency (immutable); standard **Postgres** (PostGIS-capable, not OrioleDB; immutable); **Data API on**; **auto-expose new tables off** (grant Data API access per-table in migrations); **automatic RLS on**; GitHub schema-push deploys via `ravivasavan/wavetap`.
+
 ### Hosting & Deployment
 
 | Target | Technology | Rationale |
