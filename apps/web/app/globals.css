@@ -1,0 +1,15 @@
+/* Order matters: tailwindcss → @heroui/styles → @heroui-pro/react/css */
+@import "tailwindcss";
+@import "@heroui/styles";
+@import "@heroui-pro/react/css";
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  /* neutral-50 / neutral-700 from @wavetap/tokens */
+  background-color: #fafaf8;
+  color: #3d3a34;
+  -webkit-font-smoothing: antialiased;
+}

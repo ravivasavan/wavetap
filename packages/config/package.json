@@ -1,0 +1,10 @@
+{
+  "name": "@wavetap/config",
+  "version": "0.0.0",
+  "private": true,
+  "files": ["tsconfig", "prettier.config.mjs"],
+  "exports": {
+    "./tsconfig/base.json": "./tsconfig/base.json",
+    "./prettier": "./prettier.config.mjs"
+  }
+}

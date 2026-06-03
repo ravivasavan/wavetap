@@ -18,6 +18,8 @@ build/
 out/
 .turbo/
 coverage/
+next-env.d.ts
+*.tsbuildinfo
 
 # Expo / native
 .expo/

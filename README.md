@@ -37,6 +37,37 @@ Read these in order. Each builds on the previous.
 - **Geography:** Australia
 - **Domain:** wavetap.app
 
+## Repository & Development
+
+pnpm + Turborepo monorepo:
+
+```
+apps/
+  web/      Next.js 15 + React 19 + Tailwind v4 (HeroUI Pro) — also hosts the admin panel
+  mobile/   Expo (React Native) + heroui-native            — iOS & Android
+packages/
+  tokens/   shared design tokens (→ regenerate from design-tokens/ when it lands)
+  core/     platform-agnostic domain types + logic
+  api/      typed Supabase client factory
+  config/   shared tsconfig / prettier
+supabase/   migrations, RLS, Edge Functions
+```
+
+```bash
+pnpm install          # install all workspaces
+pnpm web              # run the web app (apps/web)
+pnpm build            # build everything via Turborepo
+```
+
+**Before the web app uses HeroUI Pro components**, run the Pro CLI (needs your GitHub login):
+
+```bash
+npx heroui-pro login && npx heroui-pro install
+# then uncomment the @heroui/styles + @heroui-pro/react/css imports in apps/web/app/globals.css
+```
+
+Copy `.env.example` → `apps/web/.env.local` (and `apps/mobile/.env`) and fill in values. See `04_TECH_STACK.md`.
+
 ## For AI-assisted development
 
 These documents are designed to be loaded as project context (Cursor, Claude Code, etc.). When starting a new feature or component:
