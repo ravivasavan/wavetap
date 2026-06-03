@@ -1,10 +1,7 @@
+/* Order matters: tailwindcss → @heroui/styles → @heroui-pro/react/css */
 @import "tailwindcss";
-
-/* HeroUI — add AFTER running `npx heroui-pro login && npx heroui-pro install`.
-   Order matters: tailwindcss → @heroui/styles → @heroui-pro/react/css
-   @import "@heroui/styles";
-   @import "@heroui-pro/react/css";
-*/
+@import "@heroui/styles";
+@import "@heroui-pro/react/css";
 
 :root {
   color-scheme: light;

@@ -2,5 +2,8 @@ packages:
   - "apps/*"
   - "packages/*"
 allowBuilds:
+  '@heroui-pro/react': true
+  heroui-native-pro: true
+  heroui-pro: true
   msgpackr-extract: false
   sharp: true
