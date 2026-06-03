@@ -34,8 +34,8 @@ Inspired by Airbnb: modern, spacious, floating, uncluttered, step-by-step. The i
 
 The design system is implemented once and consumed by both clients through **HeroUI**:
 
-- **Web** — `@heroui-pro/react` + `@heroui/react`, styled with **Tailwind CSS v4**
-- **Native** — `heroui-native`, styled with **Uniwind** (Tailwind-for-React-Native)
+- **Web** — `@heroui-pro/react` + `@heroui/react` (Pro sits on OSS), styled with **Tailwind CSS v4**
+- **Native** — `heroui-native` (OSS) + **HeroUI Native Pro** (premium), on Expo + Reanimated, styled with **Uniwind** (Tailwind-for-React-Native). The native Pro catalogue is smaller than web — compose from OSS where a native-Pro component doesn't exist yet
 
 The tokens below are the **single source of truth**. They live as W3C DTCG JSON in `design-tokens/` (compiled into `packages/tokens`) and are mapped onto HeroUI's theme variables, so the same `accent-500`, `space-6`, or `radius-lg` resolves identically on web and native. Never hardcode a hex, size, or radius — reference the token.
 
@@ -48,7 +48,7 @@ The tokens below are the **single source of truth**. They live as W3C DTCG JSON 
 
 ### Seeding with the HeroUI MCP
 
-First-pass screens are generated from the HeroUI MCP (which serves both packages), then refined against this document and `08_ACCESSIBILITY.md`. Use it to pull component docs, source, theme variables, and CSS — for the surfaces enumerated in `11_ROUTES_AND_PAGES.md`.
+First-pass **web** screens are generated from the HeroUI MCP (which serves the React packages — Pro + OSS — *not* native), then refined against this document and `08_ACCESSIBILITY.md`. Use it to pull component docs, source, theme variables, and CSS for the surfaces in `11_ROUTES_AND_PAGES.md`. Native screens are built from the HeroUI Native docs/skills, reusing the same tokens so the design language stays identical.
 
 ## Colour Palette
 

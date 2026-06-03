@@ -14,7 +14,8 @@ The authoritative setup checklist and build phase order. Originally seeded from 
 ### Tasks (from Notion Tasks database)
 
 - **Create private GitHub repo (wavetap)** — e.g. `github.com/your-org/wavetap` (monorepo)
-- **Register wavetap.app domain** — .app TLD enforces HTTPS; also the native app-link/universal-link domain
+- **Register wavetap.app domain** — .app TLD is HSTS-preloaded (HTTPS mandatory); also the native app-link/universal-link domain
+- **Manage DNS at Cloudflare (free)** — point apex/`www` to Vercel (**DNS-only / grey cloud**); add Resend **SPF + DKIM + DMARC** records for email deliverability (load-bearing — magic link + OTP are the whole auth path). See [[2026-06-03-dns-cloudflare-email-deliverability]]
 - **Create a Vercel account** — Sign up with GitHub. Don’t deploy yet. (Web only.)
 - **Create an Expo account + install EAS CLI** — for native iOS/Android builds and submission
 - **Enrol in the Apple Developer Program** ($99/year) — required for TestFlight + App Store
