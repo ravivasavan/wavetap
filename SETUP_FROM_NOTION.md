@@ -1,8 +1,8 @@
-# WaveTap — Initial Setup Steps (from Notion)
+# WaveTap — Setup & Build Plan
 
-Pulled from your Notion workspace via the Notion MCP. Your **Phases** and **Tasks** define the following sequence.
+The authoritative setup checklist and build phase order. Originally seeded from the Notion workspace, but **this file — not Notion — is now canonical**; the Notion source is stale and should be re-synced from here, not the other way around.
 
-> **Note (post-pivot):** The original Notion plan assumed a single Next.js PWA. WaveTap now ships **web + native (Expo) simultaneously from a pnpm + Turborepo monorepo on HeroUI** — see `04_TECH_STACK.md`. The phases below are annotated to reflect that; the Notion source should be re-synced to match.
+> **Post-pivot (2026-06-03):** The original plan assumed a single Next.js PWA. WaveTap now ships **web + native (Expo) simultaneously from a pnpm + Turborepo monorepo on HeroUI** — see `04_TECH_STACK.md` and the [[2026-06-03-monorepo-simultaneous-native]] decision. Phases below reflect that.
 
 ---
 
@@ -90,4 +90,4 @@ Pulled from your Notion workspace via the Notion MCP. Your **Phases** and **Task
 
 ---
 
-*This file was generated from your Notion workspace. Update it by re-pulling from Notion or by editing the phase/task pages in Notion.*
+*Canonical here. If the phase plan changes, edit this file and push the change down to Notion — not the reverse.*
