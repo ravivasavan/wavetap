@@ -1,6 +1,8 @@
-# WaveTap — Initial Setup Steps (from Notion)
+# WaveTap — Setup & Build Plan
 
-Pulled from your Notion workspace via the Notion MCP. Your **Phases** and **Tasks** define the following sequence.
+The authoritative setup checklist and build phase order. Originally seeded from the Notion workspace, but **this file — not Notion — is now canonical**; the Notion source is stale and should be re-synced from here, not the other way around.
+
+> **Post-pivot (2026-06-03):** The original plan assumed a single Next.js PWA. WaveTap now ships **web + native (Expo) simultaneously from a pnpm + Turborepo monorepo on HeroUI** — see `04_TECH_STACK.md` and the [[2026-06-03-monorepo-simultaneous-native]] decision. Phases below reflect that.
 
 ---
 
@@ -11,9 +13,12 @@ Pulled from your Notion workspace via the Notion MCP. Your **Phases** and **Task
 
 ### Tasks (from Notion Tasks database)
 
-- **Create private GitHub repo (wavetap)** — e.g. `github.com/your-org/wavetap`
-- **Register wavetap.app domain** — .app TLD enforces HTTPS
-- **Create a Vercel account** — Sign up with GitHub. Don’t deploy yet.
+- **Create private GitHub repo (wavetap)** — e.g. `github.com/your-org/wavetap` (monorepo)
+- **Register wavetap.app domain** — .app TLD enforces HTTPS; also the native app-link/universal-link domain
+- **Create a Vercel account** — Sign up with GitHub. Don’t deploy yet. (Web only.)
+- **Create an Expo account + install EAS CLI** — for native iOS/Android builds and submission
+- **Enrol in the Apple Developer Program** ($99/year) — required for TestFlight + App Store
+- **Create a Google Play Console account** ($25 one-time) — required for Play distribution
 - (Implicit from Phase 01 / Tech Stack: create **Supabase** project, **Resend** account; optionally **Sentry**)
 
 ### Notes (from Notion)
@@ -21,30 +26,32 @@ Pulled from your Notion workspace via the Notion MCP. Your **Phases** and **Task
 - **Supabase free tier:** 500MB database, 1GB storage, 50k auth users, 500k Edge Function invocations/month
 - **Resend free tier:** 3,000 emails/month, 100/day
 - **Sentry free tier:** 5k errors/month
-- **VAPID keys** (for Web Push) are generated later in Phase 6
+- **Push credentials** are configured in the notifications phase: APNs key (iOS) + FCM (Android) registered with Expo via EAS. (VAPID keys for web push only if/when web push is picked up post-launch.)
 
 ---
 
-## Phase 01 — Project Scaffold
+## Phase 01 — Monorepo Scaffold (Web + Native)
 
-**Goal:** A deployed Next.js app with Tailwind configured to WaveTap design tokens, Supabase wired up, and a working “hello world” on wavetap.app.  
-**Effort:** 3–5 hours  
+**Goal:** A pnpm + Turborepo monorepo with `apps/web` (Next.js 15 + HeroUI Pro) and `apps/mobile` (Expo + heroui-native) both rendering a token-themed “Wave. Tap. Book.” starter, sharing `packages/tokens`, with Supabase wired up. Web deployed to wavetap.app; native running in Expo Go / a dev build.  
+**Effort:** 6–10 hours  
 **Depends on:** Phase 00
 
 ### Tasks
 
-1. **Initialise the project** — Next.js 14+ (App Router), repo cloned/created
-2. **Configure Tailwind with design tokens** — Use `09_DESIGN_SYSTEM.md` (colours, typography, spacing, shadows, components)
-3. **Environment variables** — `.env.local` with Supabase URL/keys, `NEXT_PUBLIC_APP_URL`, later Resend
-4. **Install dependencies** — Tailwind, Radix/shadcn, Supabase client, etc.
-5. **Supabase client utilities** — Browser and server clients, auth callback route
-6. **Basic layout and landing page** — Root layout, landing with “Wave. Tap. Book.” and CTA
-7. **Deploy** — Connect GitHub repo to Vercel, configure custom domain (wavetap.app)
+1. **Initialise the monorepo** — pnpm workspaces + Turborepo; `apps/web`, `apps/mobile`, `packages/{tokens,core,api,config}`
+2. **Build `packages/tokens`** — compile `design-tokens/` (W3C DTCG) into a shared theme consumable by Tailwind v4 (web) and Uniwind/heroui-native (mobile)
+3. **Scaffold `apps/web`** — Next.js 15 + React 19 + Tailwind v4 + `@heroui-pro/react`/`@heroui/react`; seed initial UI via the **HeroUI MCP**
+4. **Scaffold `apps/mobile`** — Expo (managed) + Expo Router + `heroui-native` + Uniwind; seed initial screens via the **HeroUI MCP**
+5. **Environment variables** — `apps/web/.env.local` and `apps/mobile/.env` (Supabase URL/anon key, app URL); EAS secrets for native
+6. **Shared Supabase utilities** — `packages/api`: typed browser/server clients + generated DB types; auth callback (web) + deep-link auth (native)
+7. **Deploy web** — Connect GitHub repo to Vercel (root = `apps/web`), configure custom domain (wavetap.app)
+8. **Native dev build** — `eas build --profile development` for at least one platform; confirm the app boots and renders tokens
 
-### Cursor context (when prompting for this phase)
+### AI context (when prompting for this phase)
 
-- `09_DESIGN_SYSTEM.md` — colour tokens, typography, spacing, shadows, components
-- `04_TECH_STACK.md` — stack decisions, architecture
+- `04_TECH_STACK.md` — monorepo layout, HeroUI packages, Expo, MCP seeding
+- `09_DESIGN_SYSTEM.md` — shared tokens, HeroUI conventions, components
+- The **HeroUI MCP** — pull component docs/source, theme variables, and CSS for both packages
 
 ---
 
@@ -60,8 +67,8 @@ Pulled from your Notion workspace via the Notion MCP. Your **Phases** and **Task
 | 05 | Profiles, Settings & Role Switching |
 | 06 | Notifications |
 | 07 | Admin Panel |
-| 08 | Navigation & Responsive Design |
-| 09 | PWA & Offline |
+| 08 | Navigation & Responsive Design (web top-bar + native/mobile tabs) |
+| 09 | Native Builds & Store Submission (EAS → TestFlight + Play) |
 | 10 | Polish & Pre-Launch |
 | 11 | Soft Launch |
 
@@ -69,16 +76,18 @@ Pulled from your Notion workspace via the Notion MCP. Your **Phases** and **Task
 
 ## Quick reference (from Wavetap hub)
 
-- **Stack:** Next.js 14+ · Supabase · Vercel · Resend  
+- **Clients:** Web (Next.js 15) + native iOS/Android (Expo), built together  
+- **Monorepo:** pnpm + Turborepo — `apps/web`, `apps/mobile`, `packages/*`  
+- **UI:** HeroUI — `@heroui-pro/react` (web) + `heroui-native` (mobile), shared tokens  
+- **Backend:** Supabase (PostgreSQL + RLS, Auth, Realtime, Edge Functions, Storage)  
 - **Auth:** Magic link (passwordless)  
-- **Database:** PostgreSQL with RLS  
-- **Hosting:** Vercel (free tier)  
-- **Mobile:** PWA (no native app)  
+- **Hosting:** Vercel (web) · EAS → App Store + Google Play (native)  
+- **Notifications:** Resend (email) · Expo Notifications (native push)  
 - **Language:** Auslan (multi-language ready)  
 - **Geography:** Australia  
 - **Domain:** wavetap.app  
-- **Monthly cost:** ~\$1.20/month (Vercel \$0, Supabase \$0, Resend \$0, Web Push \$0, domain ~\$1.20)
+- **Cost:** ~\$1.20/month infra + Apple \$99/yr + Google Play \$25 one-time (Vercel/Supabase/Resend/EAS free tiers at launch)
 
 ---
 
-*This file was generated from your Notion workspace. Update it by re-pulling from Notion or by editing the phase/task pages in Notion.*
+*Canonical here. If the phase plan changes, edit this file and push the change down to Notion — not the reverse.*

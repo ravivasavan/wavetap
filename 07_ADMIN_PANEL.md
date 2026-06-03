@@ -2,7 +2,7 @@
 
 ## Overview
 
-The admin panel is a protected section of the web app accessible only to users with admin privileges. It provides moderation tools and an anonymised analytics dashboard. Admin status is set directly in the database — there is no self-service admin promotion.
+The admin panel is a protected section of the **web app** (`apps/web`) accessible only to users with admin privileges. It is **web-only** — there is no admin surface in the native apps. It provides moderation tools and an anonymised analytics dashboard. Admin status is set directly in the database — there is no self-service admin promotion.
 
 ## Access
 

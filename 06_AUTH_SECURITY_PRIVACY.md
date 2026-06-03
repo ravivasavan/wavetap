@@ -10,9 +10,13 @@ WaveTap uses passwordless authentication via magic link. Users enter their email
 1. User enters email on login/signup screen
 2. Supabase Auth sends a magic link to that email
 3. User clicks the link → authenticated and redirected to the app
-4. Session is maintained via secure HTTP-only cookie
+4. Session is persisted per platform (see below)
 
-**Session duration:** 7 days with refresh token rotation.
+**Per-platform session handling:**
+- **Web:** secure HTTP-only cookie; the magic link returns to `/auth/callback`.
+- **Native (Expo):** the magic link opens via an app/universal link (`wavetap.app` deep link) back into the app; the Supabase session is stored in the OS secure store (`expo-secure-store`), not `localStorage`.
+
+**Session duration:** 7 days with refresh token rotation, on both clients.
 
 ### OAuth (Future)
 
