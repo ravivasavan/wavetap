@@ -83,14 +83,22 @@ Both are built on **HeroUI** so they share a design language, tokens, and compon
 | Native builds | **EAS (Expo Application Services)** | Cloud iOS/Android builds + store submission |
 | iOS distribution | **App Store / TestFlight** | Requires Apple Developer Program ($99/year) |
 | Android distribution | **Google Play** | Requires Play Console (one-time $25) |
-| Domain | **wavetap.app** | .app TLD enforces HTTPS by default; also the universal/app-link domain for native deep links |
-| DNS | **Vercel DNS** or **Cloudflare (free)** | Simple, reliable |
+| Domain | **wavetap.app** | .app TLD is HSTS-preloaded (HTTPS mandatory); also the universal/app-link domain for native deep links |
+| DNS | **Cloudflare (free)** | Single zone for Vercel web records + Resend email records. See below |
+
+### DNS & Email Deliverability
+
+`wavetap.app` DNS is managed at **Cloudflare (free)** — see the [[2026-06-03-dns-cloudflare-email-deliverability]] decision. The domain serves three roles:
+
+- **Web → Vercel:** apex A `76.76.21.21`, `www` CNAME `cname.vercel-dns.com` (use the exact values Vercel shows). **Records pointing at Vercel must be DNS-only (grey cloud, not proxied).**
+- **Email → Resend:** add `wavetap.app` in Resend and create the **SPF + DKIM + DMARC** records it generates. This is **load-bearing, not optional** — magic links + the OTP code are the entire auth path (`06_AUTH_SECURITY_PRIVACY.md`), so spam-foldering directly blocks sign-in. Start DMARC at `p=none` and tighten later.
+- **Native app-links:** served as files from the web app (`/.well-known/apple-app-site-association`, `/assetlinks.json`) via Vercel — no DNS records needed.
 
 ### Notifications
 
 | Channel | Technology | Rationale |
 |---------|-----------|-----------|
-| Email | **Resend (free tier)** | 3,000 emails/month free, clean API, React Email templates |
+| Email | **Resend (free tier)** | 3,000 emails/month free, clean API, React Email templates. Requires SPF/DKIM/DMARC on the domain (above) |
 | Native push | **Expo Notifications** (APNs + FCM under the hood) | One API, both platforms. Device tokens stored server-side and dispatched from an Edge Function |
 | Web push | **Web Push API** (service worker) | Optional / deferred — native is the primary mobile push surface, so web push is post-launch |
 | SMS | **Twilio** or **MessageMedia (AU)** | Added when budget allows. Optional at launch |
