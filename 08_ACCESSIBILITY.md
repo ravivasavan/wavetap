@@ -56,20 +56,27 @@ Every user action must produce clear, immediate visual confirmation:
 ### 7. Motion and Animation
 
 - Animations are subtle and purposeful — they indicate state change, not decoration
-- All animations respect `prefers-reduced-motion` media query
+- All animations respect reduced-motion preferences (`prefers-reduced-motion` on web; the OS reduce-motion setting via `AccessibilityInfo.isReduceMotionEnabled()` on native)
 - No flashing content (WCAG seizure guidelines)
 - Loading states use visual spinners or skeleton screens, not timed messages
 
 ## Keyboard and Screen Reader Support
 
-While the primary user base is Deaf (not blind), WaveTap still supports:
+While the primary user base is Deaf (not blind), WaveTap still supports assistive tech on every platform:
 
+**Web**
 - Full keyboard navigation (tab order, focus management, skip links)
 - Semantic HTML throughout (proper heading structure, landmarks, ARIA where needed)
 - Screen reader compatible (labels, descriptions, live regions for dynamic content)
 - Focus trapping in modals and dialogs
 
-This ensures the platform is usable by Deaf-blind users and meets WCAG compliance.
+**Native (iOS / Android)**
+- Every interactive element sets `accessibilityLabel`, `accessibilityRole`, and `accessibilityHint` where helpful
+- Logical focus order; dynamic changes announced via `accessibilityLiveRegion` (Android) / accessibility announcements (iOS)
+- Respects OS font scaling (Dynamic Type / font size settings) — layouts must not break when text scales
+- HeroUI (`heroui-native`) components ship sensible accessibility defaults; we verify rather than assume
+
+This ensures the platform is usable by Deaf-blind users with VoiceOver (iOS/macOS), TalkBack (Android), and NVDA (Windows), and meets WCAG compliance.
 
 ## Form Design
 
@@ -81,7 +88,7 @@ Forms are the core interaction (creating bookings, setting up profiles). They mu
 - Required fields are clearly marked
 - Auto-save or explicit save confirmation — never lose user input
 - Date/time pickers are visual (calendar, clock) rather than text input
-- Dropdowns use native select elements or accessible custom components (Radix)
+- Dropdowns, pickers, and overlays use accessible HeroUI components (`@heroui-pro/react` on web, `heroui-native` on native) — which ship correct roles, focus management, and labelling out of the box
 
 ## Notification Accessibility
 
@@ -90,21 +97,28 @@ Forms are the core interaction (creating bookings, setting up profiles). They mu
 - Notification preference is user-controlled (email, push, SMS — any combination)
 - No notification relies on a single channel — critical notifications (booking confirmed) are sent via all enabled channels
 
-## Responsive & Mobile PWA
+## Responsive Web + Native Mobile
 
+**Web**
 - All layouts are fully responsive from 320px to 1440px+
-- Touch-first interaction design
-- PWA install prompt is non-intrusive
+- Touch-first interaction design; works equally with mouse/keyboard
 - Mobile viewport avoids zoom-blocking (`user-scalable=yes`)
 - Horizontal scrolling is avoided entirely
 
+**Native**
+- Layouts adapt across phone sizes and orientations; safe-area insets respected (notches, home indicator)
+- Touch targets meet the same ≥ 48×48px floor
+- Honours OS-level text scaling and reduce-motion / reduce-transparency settings
+- No content relies on hover; all affordances are tap-reachable
+
 ## Testing
 
-- Automated: axe-core or Lighthouse accessibility audits in CI
-- Manual: keyboard-only navigation testing for all flows
-- Screen reader testing: VoiceOver (macOS/iOS), NVDA (Windows)
-- Colour contrast: verified with tools like Stark or Contrast Checker
-- Community testing: invite Deaf users to test during development
+- Automated (web): axe-core or Lighthouse accessibility audits in CI
+- Automated (native): Xcode Accessibility Inspector + Android Accessibility Scanner spot-checks
+- Manual: keyboard-only navigation (web) and switch/keyboard testing (native) for all flows
+- Screen reader testing: VoiceOver (macOS/iOS), TalkBack (Android), NVDA (Windows)
+- Colour contrast: verified with tools like Stark or Contrast Checker — tokens are shared, so a pass on one platform carries to the other
+- Community testing: invite Deaf users to test on web and on-device during development
 
 ## Accessibility Checklist (Per Feature)
 
@@ -118,5 +132,6 @@ Before shipping any feature, verify:
 - [ ] Keyboard navigable
 - [ ] Screen reader announces state changes
 - [ ] Error messages are clear and actionable
-- [ ] Animations respect `prefers-reduced-motion`
-- [ ] Works at 320px viewport width
+- [ ] Animations respect reduced-motion (web + native)
+- [ ] Works at 320px viewport width (web) and across phone sizes + safe areas (native)
+- [ ] Respects OS text scaling without breaking layout (native)

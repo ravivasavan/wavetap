@@ -26,24 +26,28 @@ Read these in order. Each builds on the previous.
 
 ## Quick Reference
 
-- **Stack:** Next.js + Supabase + Vercel + Resend
+- **Clients:** Responsive web (Next.js) + native iOS & Android (Expo), built simultaneously
+- **Monorepo:** pnpm + Turborepo — `apps/web`, `apps/mobile`, shared `packages/*`
+- **UI:** HeroUI — `@heroui-pro/react` (web) + `heroui-native` (mobile), one design language
+- **Backend:** Supabase (PostgreSQL + RLS, Auth, Realtime, Edge Functions, Storage)
 - **Auth:** Magic link (passwordless)
-- **Database:** PostgreSQL (Supabase) with RLS
-- **Hosting:** Vercel (free tier)
-- **Mobile:** PWA (no native app at launch)
+- **Hosting:** Vercel (web) + EAS / App Store + Google Play (native)
+- **Notifications:** Resend (email) + Expo Notifications (native push)
 - **Language:** Auslan (multi-language infrastructure)
 - **Geography:** Australia
 - **Domain:** wavetap.app
 
-## For Cursor
+## For AI-assisted development
 
-These documents are designed to be loaded into Cursor as project context. When starting a new feature or component:
+These documents are designed to be loaded as project context (Cursor, Claude Code, etc.). When starting a new feature or component:
 
 1. Reference the relevant doc(s) for requirements
-2. Follow the design system tokens for all UI work
-3. Follow the data model for any database interactions
-4. Follow the accessibility checklist before shipping
-5. Follow the booking flow states for any booking-related logic
+2. Follow the design system tokens for all UI work — they are shared across web and native
+3. Seed UI from HeroUI via the **HeroUI MCP** (`@heroui-pro/react` on web, `heroui-native` on mobile), then refine against the design system and accessibility docs
+4. Follow the data model for any database interactions
+5. Follow the accessibility checklist before shipping — on web *and* native
+6. Follow the booking flow states for any booking-related logic
+7. Put platform-agnostic logic in `packages/core` / `packages/api` so both clients share it
 
 The docs are the source of truth. If the code diverges from the docs, update one or the other — don't let them drift.
 

@@ -38,7 +38,7 @@ Wave. Tap. Book.
 
 - **Geography:** Australia only
 - **Sign language:** Auslan (infrastructure supports multi-language expansion)
-- **Platform:** Web application (PWA for mobile). No native app at launch.
+- **Platform:** Three surfaces, built together — a responsive **web app** (also home to the admin panel) and **native iOS & Android apps**. Web and native ship simultaneously from one monorepo and share a single design language (HeroUI). No PWA.
 - **Funding context:** EAF/NDIS users are a core audience, but the platform does not integrate with, invoice for, or reference any funding scheme. That's between the parties.
 
 ## What WaveTap Is Not

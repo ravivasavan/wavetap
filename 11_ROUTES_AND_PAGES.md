@@ -2,19 +2,23 @@
 
 ## Overview
 
-WaveTap is a single Next.js application serving three experiences through the same deployment:
+WaveTap serves three experiences across two clients that share one route/screen taxonomy:
 
-1. **Signer experience** — Creating and managing bookings
-2. **Interpreter experience** — Browsing and responding to bookings
-3. **Admin experience** — Moderation and analytics
+1. **Signer experience** — Creating and managing bookings *(web + native)*
+2. **Interpreter experience** — Browsing and responding to bookings *(web + native)*
+3. **Admin experience** — Moderation and analytics *(web only)*
 
-The active role determines what the user sees. Route structure uses Next.js App Router.
+The active role determines what the user sees. The **web** app uses the **Next.js App Router**; the **native** app (Expo) uses **Expo Router**, whose file-based routes mirror the web paths below screen-for-screen. The route tables that follow are the canonical taxonomy for both — a web path like `/bookings/[id]/select` is the same logical screen as its native counterpart.
+
+> **Admin is web-only.** The `/admin/*` routes exist solely in `apps/web`; the native app ships only the signer and interpreter experiences.
 
 ## Public Routes (No Auth)
 
+The marketing landing lives on **web only**. The native app opens straight to `/login` (or the authenticated home if a session exists); `/terms` and `/privacy` are reachable in-app as needed.
+
 | Route | Page | Description |
 |-------|------|-------------|
-| `/` | Landing | Hero, tagline (Wave. Tap. Book.), value proposition, CTA to sign up/log in |
+| `/` | Landing | *(web)* Hero, tagline (Wave. Tap. Book.), value proposition, CTA to sign up/log in. Also the native deep-link/app-link domain. |
 | `/login` | Auth | Email input for magic link. Simple, single-field form. |
 | `/auth/callback` | Auth callback | Handles magic link redirect, creates session |
 | `/terms` | Terms of Service | Static page. Neutral aggregator disclaimer. |
@@ -74,7 +78,9 @@ The active role determines what the user sees. Route structure uses Next.js App 
 
 ## Navigation Structure
 
-### Desktop (Top Bar)
+Navigation differs by platform but exposes the same destinations: the **web desktop** top bar, and a **bottom tab bar** used by both **native** (Expo Router tabs) and **mobile web**.
+
+### Desktop Web (Top Bar)
 
 **Signer active:**
 ```
@@ -94,7 +100,7 @@ The active role determines what the user sees. Route structure uses Next.js App 
                                                             Log out
 ```
 
-### Mobile (Bottom Tab Bar)
+### Native + Mobile Web (Bottom Tab Bar)
 
 **Signer active:**
 ```

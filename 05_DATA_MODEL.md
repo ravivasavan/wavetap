@@ -162,6 +162,8 @@ create table notifications (
 
 Notification types: `new_booking`, `interest_received`, `booking_confirmed`, `booking_filled`, `booking_cancelled`, `booking_expired`, `account_flagged`, `system`.
 
+> Native push delivery relies on a `push_tokens` table (Expo push tokens, keyed by user + device/platform) — defined in `10_NOTIFICATIONS.md`. It is part of the data model but documented there alongside the dispatch logic.
+
 ### `reports`
 
 User-to-user flagging system.

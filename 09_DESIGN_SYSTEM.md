@@ -30,6 +30,26 @@ Inspired by Airbnb: modern, spacious, floating, uncluttered, step-by-step. The i
 4. **Floating elements** — Cards, modals, and panels feel elevated with subtle shadows. Layered depth, not flat.
 5. **Visual over textual** — Use icons, illustrations, and visual indicators to reduce reading load.
 
+## One System, Two Platforms
+
+The design system is implemented once and consumed by both clients through **HeroUI**:
+
+- **Web** — `@heroui-pro/react` + `@heroui/react`, styled with **Tailwind CSS v4**
+- **Native** — `heroui-native`, styled with **Uniwind** (Tailwind-for-React-Native)
+
+The tokens below are the **single source of truth**. They live as W3C DTCG JSON in `design-tokens/` (compiled into `packages/tokens`) and are mapped onto HeroUI's theme variables, so the same `accent-500`, `space-6`, or `radius-lg` resolves identically on web and native. Never hardcode a hex, size, or radius — reference the token.
+
+### HeroUI conventions (v3)
+
+- **Tailwind v4 only** (not v3).
+- **No Provider** — components work directly.
+- **Compound component patterns** — e.g. `Sheet.Trigger` / `Sheet.Content`, `Card.Header` / `Card.Body`.
+- **`onPress`, not `onClick`** — for all interactive elements, on both platforms.
+
+### Seeding with the HeroUI MCP
+
+First-pass screens are generated from the HeroUI MCP (which serves both packages), then refined against this document and `08_ACCESSIBILITY.md`. Use it to pull component docs, source, theme variables, and CSS — for the surfaces enumerated in `11_ROUTES_AND_PAGES.md`.
+
 ## Colour Palette
 
 ### Neutrals (Warm)
@@ -130,6 +150,8 @@ Based on a 4px grid:
 
 ## Components
 
+These are **HeroUI components themed to WaveTap tokens** — not bespoke primitives. The specs below describe the *intended appearance*; the implementation is the corresponding HeroUI component (`Button`, `Card`, `TextField`/`Input`, `Chip`, `Tabs`, `Sheet`, etc.) with our token-driven theme applied. Map web (`@heroui-pro/react`) and native (`heroui-native`) to the same spec so a button looks and behaves the same on both.
+
 ### Buttons
 
 | Variant | Background | Text | Border | Usage |
@@ -187,14 +209,15 @@ All buttons: `radius-md`, `padding: space-3 space-6`, minimum width 120px, minim
 
 ### Navigation
 
-- Top navigation bar, fixed
-- Logo (left), primary nav (centre), avatar/menu (right)
-- Mobile: bottom tab bar for primary actions (Home, My Bookings, Profile)
-- Active role indicator visible in nav (subtle badge showing "Signer" or "Interpreter")
+- **Web (desktop):** top navigation bar, fixed — logo (left), primary nav (centre), avatar/menu (right)
+- **Web (mobile browser):** collapses to the same bottom-tab pattern as native for consistency
+- **Native:** bottom tab bar via Expo Router for primary actions; native header for page titles and back
+- Bottom tab bar carries the primary actions (e.g. Home/Pool, My Bookings, Notifications, Profile)
+- Active role indicator visible in nav (subtle badge showing "Signer" or "Interpreter") — see `11_ROUTES_AND_PAGES.md`
 
 ## Iconography
 
-Use **Lucide Icons** (open source, consistent, clean). 24px default size, 1.5px stroke weight.
+Use **Lucide Icons** (open source, consistent, clean) — `lucide-react` on web, `lucide-react-native` on native, so the icon set is identical across platforms. 24px default size, 1.5px stroke weight.
 
 Key icons:
 - Wave: `hand` or custom wave illustration

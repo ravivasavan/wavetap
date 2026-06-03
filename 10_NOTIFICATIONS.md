@@ -11,9 +11,10 @@
 | Channel | Technology | Launch Status |
 |---------|-----------|--------------|
 | Email | Resend | ✅ Launch |
-| Push (browser) | Web Push API / Service Worker | ✅ Launch |
+| Native push (iOS + Android) | Expo Notifications (APNs + FCM) | ✅ Launch |
+| In-app | Notification bell + badge counter (web + native) | ✅ Launch |
+| Web push (browser) | Web Push API / Service Worker | 🔜 Post-launch — native is the primary mobile push surface |
 | SMS | Twilio or MessageMedia | 🔜 Post-launch (budget dependent) |
-| In-app | Notification bell + badge counter | ✅ Launch |
 
 Users enable/disable each channel independently in their profile settings.
 
@@ -53,21 +54,28 @@ Built with **React Email** (compatible with Resend). All emails follow the WaveT
 
 ## Push Notifications
 
-Implemented via the Web Push API and service worker (PWA):
+The primary push surface is the **native app**, via **Expo Notifications** (which fronts APNs on iOS and FCM on Android with one API). Web push is deferred to post-launch.
 
 - User grants permission during onboarding (non-intrusive prompt, not on first load)
-- Push subscription is stored in a `push_subscriptions` table
-- Supabase Edge Function sends push via Web Push protocol when events occur
-- Notifications display as native browser/OS notifications with the WaveTap icon
+- On grant, the app obtains an **Expo push token** and stores it in a `push_tokens` table, keyed by user + device
+- A Supabase Edge Function sends to the [Expo Push API](https://docs.expo.dev/push-notifications/sending-notifications/) when events occur
+- Notifications display as native OS notifications with the WaveTap icon; tapping deep-links into the relevant screen (Expo Router)
+- Stale/invalid tokens reported by Expo (`DeviceNotRegistered`) are pruned from `push_tokens`
 
 ```sql
-create table push_subscriptions (
+create table push_tokens (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references profiles(id) on delete cascade,
-  subscription jsonb not null,
-  created_at timestamptz default now()
+  expo_push_token text not null,
+  platform text not null check (platform in ('ios', 'android', 'web')),
+  device_id text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  unique(user_id, expo_push_token)
 );
 ```
+
+> When web push lands post-launch, browser subscriptions are stored as `platform = 'web'` rows (with the subscription payload in a dedicated column) so dispatch logic stays uniform.
 
 ## In-App Notifications
 
@@ -83,8 +91,8 @@ Notifications are dispatched by Supabase Edge Functions triggered by database ch
 
 1. **Database trigger** fires on insert to `booking_interests`, `booking_confirmations`, or status change on `bookings`
 2. **Edge Function** receives the event, determines recipients and notification type
-3. **For each recipient:** check their notification preferences, send via enabled channels
-4. **Insert record** into `notifications` table for in-app display
+3. **For each recipient:** check their notification preferences, then send via enabled channels — Resend (email) and the Expo Push API (one request batching all of that user's device tokens from `push_tokens`)
+4. **Insert record** into `notifications` table for in-app display (rendered on web and native)
 
 ## Rate Limiting
 
