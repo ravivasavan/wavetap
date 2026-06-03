@@ -4,7 +4,7 @@
 
 WaveTap is a single Next.js application serving three experiences through the same deployment:
 
-1. **Deaf/HoH experience** — Creating and managing bookings
+1. **Signer experience** — Creating and managing bookings
 2. **Interpreter experience** — Browsing and responding to bookings
 3. **Admin experience** — Moderation and analytics
 
@@ -24,13 +24,13 @@ The active role determines what the user sees. Route structure uses Next.js App 
 
 | Route | Page | Description |
 |-------|------|-------------|
-| `/onboarding/role` | Role selection | "I am Deaf/HoH", "I am an Interpreter", "Both" |
+| `/onboarding/role` | Role selection | "I am a Signer", "I am an Interpreter", "Both" |
 | `/onboarding/profile` | Profile setup | Stepped form — name, location, sign languages, contact preference |
 | `/onboarding/interpreter` | Interpreter setup | If interpreter role — working radius, availability pattern, bio |
 | `/onboarding/notifications` | Notification preferences | Enable push, confirm email, optional SMS |
 | `/onboarding/terms` | Accept ToS | Must accept before proceeding |
 
-## Deaf/HoH Routes
+## Signer Routes
 
 | Route | Page | Description |
 |-------|------|-------------|
@@ -76,7 +76,7 @@ The active role determines what the user sees. Route structure uses Next.js App 
 
 ### Desktop (Top Bar)
 
-**Deaf/HoH active:**
+**Signer active:**
 ```
 [Logo]   Home   My Bookings   [Bell Icon]   [Avatar ▼]
                                               Profile
@@ -90,13 +90,13 @@ The active role determines what the user sees. Route structure uses Next.js App 
 [Logo]   Pool   My Bookings   Availability   [Bell Icon]   [Avatar ▼]
                                                             Profile
                                                             Settings
-                                                            Switch to Deaf/HoH
+                                                            Switch to Signer
                                                             Log out
 ```
 
 ### Mobile (Bottom Tab Bar)
 
-**Deaf/HoH active:**
+**Signer active:**
 ```
 [Home]   [+ New]   [My Bookings]   [Notifications]   [Profile]
 ```

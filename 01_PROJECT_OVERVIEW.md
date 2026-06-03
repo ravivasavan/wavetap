@@ -30,7 +30,7 @@ Wave. Tap. Book.
 2. **P2P only** — No agencies, organisations, or institutional accounts. Individual humans on both sides.
 3. **Off-platform everything** — Once a match is confirmed, contact details are exchanged and parties handle all further coordination (location specifics, invoicing, payment, cancellations) off-platform.
 4. **Trust-based** — Interpreter credentials are self-declared. The signer decides who they are comfortable working with.
-5. **Signer empowerment** — The Deaf/HoH user is the expert on their own needs. The platform does not suggest, prescribe, or gatekeep.
+5. **Signer empowerment** — The Signer is the expert on their own needs. The platform does not suggest, prescribe, or gatekeep.
 6. **Privacy-first** — Fuzzy locations, minimal data collection, full account deletion. No data lingers.
 7. **Accessibility is foundational** — Not an afterthought. The primary user base is Deaf. Every decision flows from this.
 

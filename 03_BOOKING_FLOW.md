@@ -25,6 +25,7 @@ The signer fills out a simple form:
 | Mode | Yes | **In-person** or **Remote** |
 | Location | Conditional | Required for in-person. Suburb/postcode level — displayed as pin + 5km fuzzy radius |
 | Number of interpreters needed | Optional | Defaults to 1. Signer can specify more for longer events |
+| Looking for a Deaf interpreter? | Optional | Boolean. Shown to interpreters on the pool card as info, **not as a filter** — any interpreter can still respond. Helps Deaf interpreters self-select where the signer has specifically asked. See `prefers_deaf_interpreter` in 05_DATA_MODEL.md. |
 | Additional notes | Optional | Free text |
 
 No booking categories (medical, legal, social, etc.). No specialisation filters. The signer describes what they need in plain language and the interpreter decides if it's a fit.

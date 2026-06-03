@@ -71,7 +71,7 @@ This is irreversible. The user is prompted to confirm before proceeding.
 
 On signup, users accept a Terms of Service that establishes:
 
-- WaveTap is a neutral aggregator that connects Deaf/HoH individuals with interpreters
+- WaveTap is a neutral aggregator that connects Signers with Interpreters
 - WaveTap does not employ, endorse, verify credentials, or guarantee either party
 - All agreements, payments, invoicing, scheduling, and disputes are handled directly between the parties off-platform
 - WaveTap holds no liability for the conduct, quality, reliability, or outcomes of any booking

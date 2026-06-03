@@ -190,7 +190,7 @@ All buttons: `radius-md`, `padding: space-3 space-6`, minimum width 120px, minim
 - Top navigation bar, fixed
 - Logo (left), primary nav (centre), avatar/menu (right)
 - Mobile: bottom tab bar for primary actions (Home, My Bookings, Profile)
-- Active role indicator visible in nav (subtle badge showing "Deaf/HoH" or "Interpreter")
+- Active role indicator visible in nav (subtle badge showing "Signer" or "Interpreter")
 
 ## Iconography
 

@@ -9,7 +9,7 @@ The admin panel is a protected section of the web app accessible only to users w
 - Route: `/admin`
 - Protected by RLS + middleware check for `is_admin = true` on the profile
 - Same authentication flow as regular users (magic link)
-- Admin users also have normal platform access and can hold Deaf/HoH or Interpreter roles
+- Admin users also have normal platform access and can hold Signer or Interpreter roles
 
 ## Moderation Tools
 

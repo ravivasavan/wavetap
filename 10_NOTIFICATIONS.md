@@ -19,7 +19,7 @@ Users enable/disable each channel independently in their profile settings.
 
 ## Notification Events
 
-### For Deaf/HoH Users (Signers)
+### For Signers
 
 | Event | Message | Priority |
 |-------|---------|----------|

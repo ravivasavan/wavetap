@@ -39,8 +39,8 @@ create table profiles (
   location_lng numeric,
   sign_languages text[] default '{"auslan"}',
   preferred_contact text not null default 'email' check (preferred_contact in ('email', 'mobile', 'both')),
-  roles text[] not null check (roles <@ array['deaf_hoh', 'interpreter']),
-  active_role text not null check (active_role in ('deaf_hoh', 'interpreter')),
+  roles text[] not null check (roles <@ array['signer', 'interpreter']),
+  active_role text not null check (active_role in ('signer', 'interpreter')),
   avatar_url text,
   notification_email boolean default true,
   notification_push boolean default true,
@@ -61,6 +61,7 @@ create table interpreter_profiles (
   availability_pattern jsonb not null default '{}',
   bio text,
   accepts_remote boolean default true,
+  is_deaf_interpreter boolean not null default false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
@@ -84,7 +85,7 @@ Period values: `daytime` (8am–5pm), `evening` (5pm–10pm), `all_day`, `null` 
 
 ### `bookings`
 
-A booking request created by a Deaf/HoH user.
+A booking request created by a Signer.
 
 ```sql
 create table bookings (
@@ -102,6 +103,7 @@ create table bookings (
   location_lat numeric,
   location_lng numeric,
   interpreters_needed integer default 1,
+  prefers_deaf_interpreter boolean not null default false,
   notes text,
   status text not null default 'open' check (status in ('open', 'pending', 'confirmed', 'expired', 'cancelled')),
   created_at timestamptz default now(),

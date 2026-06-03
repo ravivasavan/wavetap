@@ -13,7 +13,7 @@ Read these in order. Each builds on the previous.
 | # | Document | Description |
 |---|----------|-------------|
 | 01 | [Project Overview](./01_PROJECT_OVERVIEW.md) | Vision, principles, what WaveTap is and isn't |
-| 02 | [User Roles & Profiles](./02_USER_ROLES_AND_PROFILES.md) | Deaf/HoH and Interpreter roles, dual-role accounts, profile fields |
+| 02 | [User Roles & Profiles](./02_USER_ROLES_AND_PROFILES.md) | Signer and Interpreter roles, dual-role accounts, profile fields |
 | 03 | [Booking Flow](./03_BOOKING_FLOW.md) | The complete lifecycle: Wave → Tap → Book |
 | 04 | [Tech Stack](./04_TECH_STACK.md) | Architecture, infrastructure, cost projection |
 | 05 | [Data Model](./05_DATA_MODEL.md) | Database schema, tables, RLS, indexes |
@@ -50,4 +50,4 @@ The docs are the source of truth. If the code diverges from the docs, update one
 ---
 
 **GitHub repo description** (paste into *About* → *Description*):  
-`Peer-to-peer platform connecting Deaf/HoH with Auslan interpreters. Wave. Tap. Book. — wavetap.app`
+`Peer-to-peer platform connecting Signers with Auslan interpreters. Wave. Tap. Book. — wavetap.app`

@@ -4,7 +4,7 @@
 
 WaveTap has two explicit user roles:
 
-1. **Deaf/HoH** — The person who creates bookings and selects interpreters
+1. **Signer** — The person who creates bookings and selects interpreters
 2. **Interpreter** — The person who responds to bookings and makes themselves available
 
 Both are signers. The platform differentiates by function: you are either **booking** or **available to be booked**.
@@ -13,7 +13,7 @@ Both are signers. The platform differentiates by function: you are either **book
 
 A single account can hold both roles. For example, a Deaf interpreter can toggle between:
 
-- Browsing and creating bookings (Deaf/HoH mode)
+- Browsing and creating bookings (Signer mode)
 - Viewing and responding to booking requests (Interpreter mode)
 
 The experience adapts based on the active role. Role selection happens at signup and can be changed or expanded in settings. The interface should make the active role clear at all times without being intrusive.
@@ -21,7 +21,7 @@ The experience adapts based on the active role. Role selection happens at signup
 ## Signup Flow
 
 1. Magic link authentication (email-based, passwordless)
-2. Choose role: **Deaf/HoH** or **Interpreter** (or both)
+2. Choose role: **Signer** or **Interpreter** (or both)
 3. Minimal profile setup based on role
 4. Accept Terms of Service (neutral aggregator disclaimer)
 5. Done
@@ -30,7 +30,7 @@ OAuth (Google, Apple) is on the roadmap but not at launch.
 
 ## Profile Fields
 
-### Deaf/HoH Profile
+### Signer Profile
 
 | Field | Required | Notes |
 |-------|----------|-------|
@@ -55,6 +55,7 @@ OAuth (Google, Apple) is on the roadmap but not at launch.
 | Availability pattern | Yes | General weekly windows (e.g. "Weekdays, daytime") |
 | Preferred contact method | Yes | Email or Mobile — determines what is shared on match |
 | Brief bio | Optional | Short free-text, no structure enforced |
+| Deaf interpreter | Optional | Self-declared boolean. If true, renders a *"Deaf interpreter"* chip on the candidate card during signer selection. Not verified, not a credential. See `is_deaf_interpreter` in 05_DATA_MODEL.md. |
 | Profile photo | Optional | |
 
 ### What Is NOT on Profiles
