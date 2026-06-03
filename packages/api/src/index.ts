@@ -5,13 +5,15 @@
  * NEXT_PUBLIC_*, native reads EXPO_PUBLIC_*) and, on native, a storage adapter
  * (expo-secure-store) since there's no localStorage.
  *
- * `Database` is a placeholder until we generate types from the live schema with
- * `supabase gen types typescript` (Phase 02). Replace the import then.
+ * `Database` is generated from the live schema. Regenerate after migrations:
+ * `supabase gen types typescript --linked > src/database.types.ts` (or via the
+ * Supabase MCP `generate_typescript_types`).
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-// Placeholder — swap for generated types: `supabase gen types typescript --linked`
-export type Database = Record<string, unknown>;
+import type { Database } from "./database.types";
+
+export type { Database };
 
 export interface SupabaseEnv {
   url: string;
