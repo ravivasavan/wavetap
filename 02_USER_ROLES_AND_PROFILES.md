@@ -16,17 +16,21 @@ A single account can hold both roles. For example, a Deaf interpreter can toggle
 - Browsing and creating bookings (Signer mode)
 - Viewing and responding to booking requests (Interpreter mode)
 
-The experience adapts based on the active role. Role selection happens at signup and can be changed or expanded in settings. The interface should make the active role clear at all times without being intrusive.
+The experience adapts based on the active role. At signup the user picks a **starting mode** (Signer, Interpreter, or both) — framed as a starting point, not a permanent choice. The **second role is an additive opt-in** added anytime from Profile ("Offer to interpret" / "Need an interpreter yourself?"), never a re-onboard. The interface should make the active role clear at all times without being intrusive. See the [[2026-06-03-onboarding-soft-starting-mode]] decision.
 
 ## Signup Flow
 
-1. Magic link authentication (email-based, passwordless)
-2. Choose role: **Signer** or **Interpreter** (or both)
-3. Minimal profile setup based on role
+1. Email authentication (passwordless) — **magic link and a 6-digit code, co-equal** — see `06_AUTH_SECURITY_PRIVACY.md`
+2. Pick a **starting mode**: *I need an interpreter* (Signer) / *I'm an interpreter* (Interpreter) / *Both* — reversible, not a hard fork
+3. Minimal setup for the chosen mode (Signer: name, location, contact preference — then they can post a booking immediately). The Interpreter path is a non-blocking checklist (see below)
 4. Accept Terms of Service (neutral aggregator disclaimer)
 5. Done
 
 OAuth (Google, Apple) is on the roadmap but not at launch.
+
+### Interpreter "live" state
+
+An interpreter is **not visible in the booking pool until their setup checklist clears** — at minimum a **working area + radius** and an **availability pattern** must be set (bio, photo, and the Deaf-interpreter toggle are optional). Until then the account exists and can browse, but isn't eligible to receive or appear against bookings. This prevents half-configured interpreters surfacing to signers. See `11_ROUTES_AND_PAGES.md` (`/onboarding/interpreter`).
 
 ## Profile Fields
 
