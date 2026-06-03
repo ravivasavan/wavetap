@@ -18,6 +18,16 @@ WaveTap uses passwordless authentication via magic link. Users enter their email
 
 **Session duration:** 7 days with refresh token rotation, on both clients.
 
+### OTP Code Fallback
+
+Magic links fail in real conditions — deep links don't always open on native, and links land in spam folders (an outsized risk for an email-dependent, accessibility-first product). So the same email that carries the magic link also carries a **6-digit one-time code**, and the "check your email" screen (`/login/check`) offers:
+
+- **Enter code instead** — type the 6-digit code to authenticate without clicking the link
+- **Resend** — re-send the email (subject to the rate limit below)
+- **Open email app** — jump straight to the user's mail client
+
+Supabase Auth issues both the link and the code from the same OTP under the hood, so this is configuration, not a separate auth path. Magic link stays the *primary* affordance; the code is the fallback. (If deliverability data later shows links underperform, the code can be promoted to primary — see the [[2026-06-03-onboarding-soft-starting-mode]] decision.)
+
 ### OAuth (Future)
 
 Google and Apple OAuth will be added as secondary auth options. Supabase Auth supports these out of the box — configuration only, no code changes to the auth flow.
