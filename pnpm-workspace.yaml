@@ -2,4 +2,5 @@ packages:
   - "apps/*"
   - "packages/*"
 allowBuilds:
+  msgpackr-extract: false
   sharp: true
