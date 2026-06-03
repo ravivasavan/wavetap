@@ -20,7 +20,7 @@ The experience adapts based on the active role. At signup the user picks a **sta
 
 ## Signup Flow
 
-1. Magic link authentication (email-based, passwordless), with a 6-digit **OTP code fallback** — see `06_AUTH_SECURITY_PRIVACY.md`
+1. Email authentication (passwordless) — **magic link and a 6-digit code, co-equal** — see `06_AUTH_SECURITY_PRIVACY.md`
 2. Pick a **starting mode**: *I need an interpreter* (Signer) / *I'm an interpreter* (Interpreter) / *Both* — reversible, not a hard fork
 3. Minimal setup for the chosen mode (Signer: name, location, contact preference — then they can post a booking immediately). The Interpreter path is a non-blocking checklist (see below)
 4. Accept Terms of Service (neutral aggregator disclaimer)

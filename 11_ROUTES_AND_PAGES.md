@@ -20,7 +20,7 @@ The marketing landing lives on **web only**. The native app opens straight to `/
 |-------|------|-------------|
 | `/` | Landing | *(web)* Hero, tagline (Wave. Tap. Book.), value proposition, CTA to sign up/log in. Also the native deep-link/app-link domain. |
 | `/login` | Auth | Email input for magic link. Single-field form. "We'll email you a link to sign in — no password." |
-| `/login/check` | Check your email | Confirms the address, with **Resend**, **Open email app**, and **Enter code instead** (OTP fallback). See `06_AUTH_SECURITY_PRIVACY.md`. |
+| `/login/check` | Check your email | Confirms the address. **Magic link and a 6-digit code are co-equal** — code entry sits alongside the link with equal prominence, plus **Resend** and **Open email app**. See `06_AUTH_SECURITY_PRIVACY.md`. |
 | `/auth/callback` | Auth callback | Handles magic-link redirect (web) / deep link (native), creates session |
 | `/terms` | Terms of Service | Static page. Neutral aggregator disclaimer. |
 | `/privacy` | Privacy Policy | Static page. |
@@ -33,10 +33,9 @@ Onboarding does **not** hard-fork roles. Everyone signs up the same minimal way 
 |-------|------|-------------|
 | `/onboarding/start` | Starting mode | "What brings you to WaveTap?" — *I need an interpreter* (Signer) / *I'm an interpreter* (Interpreter) / *Both*. Framed as a starting point, not a permanent choice. |
 | `/onboarding/profile` | Profile setup | Stepped form — name (pre-filled), location (suburb/postcode), sign languages, contact preference. Minimal; a Signer can post a booking right after. |
-| `/onboarding/interpreter` | Interpreter setup | **Checklist, not a wall** — working area + radius, availability pattern, appearance (bio + optional *Deaf interpreter* toggle), push priming. The interpreter is **hidden from the pool until area + availability are set** (a "live / not-live" state). |
+| `/onboarding/interpreter` | Interpreter setup | **Checklist, not a wall** — working area + radius, availability pattern, appearance (bio + optional *Deaf interpreter* toggle). The interpreter is **hidden from the pool until area + availability are set** (a "live / not-live" state). |
+| `/onboarding/notifications` | Notification prime | A single, non-intrusive permission prime near the end of onboarding (after value is clear) — enable push, confirm email. Not on first load. Full controls live at `/settings/notifications`. |
 | `/onboarding/terms` | Accept ToS | Must accept before proceeding |
-
-> Notification preferences are primed contextually rather than as a forced onboarding step — during the interpreter checklist (clear value) and at a signer's first booking interaction. Full controls live at `/settings/notifications`.
 
 ## Signer Routes
 
