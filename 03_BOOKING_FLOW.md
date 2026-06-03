@@ -24,8 +24,7 @@ The signer fills out a simple form:
 | End time / estimated duration | Optional | If not provided, left open |
 | Mode | Yes | **In-person** or **Remote** |
 | Location | Conditional | Required for in-person. Suburb/postcode level — displayed as pin + 5km fuzzy radius |
-| Number of interpreters needed | Optional | Defaults to 1. Signer can specify more for longer events |
-| Looking for a Deaf interpreter? | Optional | Boolean. Shown to interpreters on the pool card as info, **not as a filter** — any interpreter can still respond. Helps Deaf interpreters self-select where the signer has specifically asked. See `prefers_deaf_interpreter` in 05_DATA_MODEL.md. |
+| Team composition | Optional | Two steppers — *Any interpreter: N* / *Deaf interpreter: M* — defining the booking's team size (1–10 total) and minimum DI requirement. Default: 1 Any, 0 Deaf. Persists as `slots` jsonb array in 05_DATA_MODEL.md. Confirmation is server-validated against the composition (signer can't accidentally confirm 2 DIs when 1 of each was needed). See 2026-05-22 mixed-type team bookings ADR. |
 | Additional notes | Optional | Free text |
 
 No booking categories (medical, legal, social, etc.). No specialisation filters. The signer describes what they need in plain language and the interpreter decides if it's a fit.

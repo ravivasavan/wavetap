@@ -102,8 +102,10 @@ create table bookings (
   location_state text,
   location_lat numeric,
   location_lng numeric,
-  interpreters_needed integer default 1,
-  prefers_deaf_interpreter boolean not null default false,
+  slots jsonb not null default '[{"kind": "any"}]',
+  -- Each slot: {"kind": "any" | "deaf"}. Array length 1–10.
+  -- Replaces former `interpreters_needed` + `prefers_deaf_interpreter`.
+  -- See 2026-05-22 mixed-type team bookings ADR for shape + validation rules.
   notes text,
   status text not null default 'open' check (status in ('open', 'pending', 'confirmed', 'expired', 'cancelled')),
   created_at timestamptz default now(),
