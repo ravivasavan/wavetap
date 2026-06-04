@@ -44,6 +44,8 @@ create table profiles (
   avatar_url text,
   is_admin boolean not null default false,        -- admin flag (06 + 07); set only in DB, never via UI
   suspended_at timestamptz,                        -- admin "suspend account" (07); null = active
+  accepted_terms_at timestamptz,                   -- ToS acceptance at onboarding (11); null = not accepted
+  tos_version text,                                -- which ToS version was accepted
   notification_email boolean default true,
   notification_push boolean default true,
   notification_sms boolean default false,

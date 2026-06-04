@@ -369,6 +369,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          accepted_terms_at: string | null
           active_role: string
           avatar_url: string | null
           created_at: string | null
@@ -389,9 +390,11 @@ export type Database = {
           roles: string[]
           sign_languages: string[] | null
           suspended_at: string | null
+          tos_version: string | null
           updated_at: string | null
         }
         Insert: {
+          accepted_terms_at?: string | null
           active_role: string
           avatar_url?: string | null
           created_at?: string | null
@@ -412,9 +415,11 @@ export type Database = {
           roles: string[]
           sign_languages?: string[] | null
           suspended_at?: string | null
+          tos_version?: string | null
           updated_at?: string | null
         }
         Update: {
+          accepted_terms_at?: string | null
           active_role?: string
           avatar_url?: string | null
           created_at?: string | null
@@ -435,6 +440,7 @@ export type Database = {
           roles?: string[]
           sign_languages?: string[] | null
           suspended_at?: string | null
+          tos_version?: string | null
           updated_at?: string | null
         }
         Relationships: []
