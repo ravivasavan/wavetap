@@ -42,6 +42,8 @@ create table profiles (
   roles text[] not null check (roles <@ array['signer', 'interpreter']),
   active_role text not null check (active_role in ('signer', 'interpreter')),
   avatar_url text,
+  is_admin boolean not null default false,        -- admin flag (06 + 07); set only in DB, never via UI
+  suspended_at timestamptz,                        -- admin "suspend account" (07); null = active
   notification_email boolean default true,
   notification_push boolean default true,
   notification_sms boolean default false,
@@ -49,6 +51,16 @@ create table profiles (
   updated_at timestamptz default now()
 );
 ```
+
+> **RLS / privacy note (implemented Phase 02).** `profiles` and `interpreter_profiles`
+> are **own-row-only** for the `authenticated` role — a user reads/writes only their
+> own row. Other users' *public* fields are served through the
+> `public_profiles` / `public_interpreter_profiles` views (safe columns only:
+> display name, avatar, suburb, state, sign languages, roles / bio, accepts_remote,
+> is_deaf_interpreter). This satisfies the booking-pool "read any profile" need
+> while honouring `06`'s guarantee that email, mobile, postcode and exact lat/lng
+> are **never** exposed to other users. Admins read/write all rows via the
+> `is_admin()` RLS helper (and server-side via the service role).
 
 ### `interpreter_profiles`
 
