@@ -84,5 +84,5 @@ export async function completeOnboarding(state: OnboardingState): Promise<Comple
     }
   }
 
-  redirect("/home");
+  redirect("/onboarding/done");
 }

@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 // (signer-only skips it), so we show a smooth proportional bar rather than a
 // brittle "step N of 5".
 const STEP_ORDER = [
+  "/onboarding/welcome",
   "/onboarding/start",
   "/onboarding/profile",
   "/onboarding/interpreter",
@@ -17,8 +18,9 @@ const STEP_ORDER = [
 
 export default function OnboardingLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const isDone = pathname.startsWith("/onboarding/done");
   const idx = STEP_ORDER.findIndex((s) => pathname.startsWith(s));
-  const progress = idx < 0 ? 0 : (idx + 1) / STEP_ORDER.length;
+  const progress = isDone ? 1 : idx < 0 ? 0 : (idx + 1) / STEP_ORDER.length;
 
   return (
     <div className="bg-background flex min-h-screen flex-col">
