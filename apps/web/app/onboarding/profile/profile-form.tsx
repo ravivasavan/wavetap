@@ -1,6 +1,8 @@
 "use client";
 
 import { Button, Input, Label, ListBox, Select, TextField } from "@heroui/react";
+import { ArrowRight, CircleAlert, MapPin } from "lucide-react";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -63,7 +65,6 @@ export function ProfileForm({ defaultName }: { defaultName: string }) {
   const [mobile, setMobile] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // Re-hydrate from the wizard (e.g. navigating back) after mount, to avoid SSR mismatch.
   useEffect(() => {
     const s = readOnboarding();
     if (s.displayName) setName(s.displayName);
@@ -93,7 +94,12 @@ export function ProfileForm({ defaultName }: { defaultName: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="flex flex-col gap-4"
+    >
       <TextField value={name} onChange={setName} isRequired className="w-full">
         <Label>Your name</Label>
         <Input placeholder="How you'd like to appear" autoComplete="name" />
@@ -102,11 +108,11 @@ export function ProfileForm({ defaultName }: { defaultName: string }) {
       <div className="flex gap-3">
         <TextField value={suburb} onChange={setSuburb} className="flex-1">
           <Label>Suburb</Label>
-          <Input placeholder="e.g. Newtown" />
+          <Input placeholder="e.g. Newtown" autoComplete="address-level2" />
         </TextField>
         <TextField value={postcode} onChange={setPostcode} className="w-28">
           <Label>Postcode</Label>
-          <Input placeholder="2042" inputMode="numeric" />
+          <Input placeholder="2042" inputMode="numeric" autoComplete="postal-code" />
         </TextField>
       </div>
 
@@ -117,6 +123,11 @@ export function ProfileForm({ defaultName }: { defaultName: string }) {
         onChange={setStateVal}
         items={STATES.map((s) => ({ id: s, label: s }))}
       />
+
+      <p className="text-muted flex items-start gap-1.5 text-xs leading-relaxed">
+        <MapPin size={14} strokeWidth={1.5} className="mt-0.5 shrink-0" />
+        Others only ever see your suburb — never your exact address.
+      </p>
 
       <FieldSelect
         label="Preferred contact"
@@ -133,11 +144,20 @@ export function ProfileForm({ defaultName }: { defaultName: string }) {
         </TextField>
       ) : null}
 
-      {error ? <p className="text-danger text-sm">{error}</p> : null}
+      {error ? (
+        <p
+          className="text-danger flex items-center gap-2 rounded-xl bg-[var(--danger-soft)] px-3 py-2 text-sm"
+          role="alert"
+        >
+          <CircleAlert size={16} strokeWidth={1.5} className="shrink-0" />
+          {error}
+        </p>
+      ) : null}
 
       <Button fullWidth onPress={next}>
         Continue
+        <ArrowRight size={18} strokeWidth={1.5} />
       </Button>
-    </div>
+    </motion.div>
   );
 }
