@@ -1,0 +1,28 @@
+{
+  "$description": "WaveTap semantic tokens (W3C DTCG). Aliases that map primitive values onto HeroUI v3's theme CSS variables. Keys under `heroui` become `--<key>` overrides in packages/tokens/theme.css (light mode). HeroUI auto-derives the *-hover and *-soft variants via color-mix, so we only set the base roles. Dark mode is intentionally not authored for launch (09_DESIGN_SYSTEM is light-first); add a `heroui-dark` group later.",
+  "heroui": {
+    "background": { "$value": "{color.neutral.50}", "$description": "Warm page background — never pure white (09 usage rule)" },
+    "foreground": { "$value": "{color.neutral.700}", "$description": "Default text / headings" },
+    "surface": { "$value": "{color.white}", "$description": "Cards, accordions (non-overlay surfaces)" },
+    "surface-secondary": { "$value": "{color.neutral.100}" },
+    "overlay": { "$value": "{color.white}", "$description": "Tooltips, popovers, modals, menus" },
+    "muted": { "$value": "{color.neutral.400}", "$description": "Secondary / muted text" },
+    "default": { "$value": "{color.neutral.100}", "$description": "Secondary button background" },
+    "default-foreground": { "$value": "{color.neutral.700}" },
+    "border": { "$value": "{color.neutral.200}" },
+    "separator": { "$value": "{color.neutral.200}" },
+    "accent": { "$value": "{color.accent.500}", "$description": "The one attention colour — CTAs, links, active states" },
+    "accent-foreground": { "$value": "{color.white}" },
+    "success": { "$value": "{color.success}" },
+    "success-foreground": { "$value": "{color.white}" },
+    "warning": { "$value": "{color.warning}" },
+    "warning-foreground": { "$value": "{color.neutral.900}" },
+    "danger": { "$value": "{color.error}" },
+    "danger-foreground": { "$value": "{color.white}" },
+    "focus": { "$value": "{color.accent.500}", "$description": "Focus ring — paired with text/icon, never colour-only (08 accessibility)" }
+  },
+  "radius": {
+    "$description": "HeroUI uses a single --radius base and derives --field-radius (= radius * 1.5). We anchor on radius.md (12px) so buttons/cards land on the spec's most-used radius.",
+    "base": { "$value": "{radius.md}" }
+  }
+}

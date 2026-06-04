@@ -1,15 +1,13 @@
-/* Order matters: tailwindcss → @heroui/styles → @heroui-pro/react/css */
+/* Order matters: tailwindcss → @heroui/styles → @heroui-pro/react/css → WaveTap theme.
+ * The WaveTap theme overrides HeroUI's variables with our brand (see @wavetap/tokens,
+ * generated from design-tokens/*.json). It also sets :root --font-sans + body styles. */
 @import "tailwindcss";
 @import "@heroui/styles";
 @import "@heroui-pro/react/css";
+@import "@wavetap/tokens/theme.css";
 
+/* Bind the self-hosted Inter (next/font, see layout.tsx) into the token font stack. */
 :root {
-  color-scheme: light;
-}
-
-body {
-  /* neutral-50 / neutral-700 from @wavetap/tokens */
-  background-color: #fafaf8;
-  color: #3d3a34;
-  -webkit-font-smoothing: antialiased;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
 }

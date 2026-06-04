@@ -5,6 +5,10 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
+    "@wavetap/tokens#build": {
+      "inputs": ["build.mjs", "../../design-tokens/**"],
+      "outputs": ["src/tokens.gen.ts", "src/theme.css"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
