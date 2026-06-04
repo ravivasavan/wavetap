@@ -1,6 +1,8 @@
 "use client";
 
 import { Button, Input, Label, ListBox, Select, Switch, TextField } from "@heroui/react";
+import { ArrowRight, CircleCheck, Clock, MapPin } from "lucide-react";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -47,8 +49,9 @@ function Picker({
       className={className ?? "w-full"}
       selectedKey={value || null}
       onSelectionChange={(k) => onChange(String(k))}
+      aria-label={label}
     >
-      <Label>{label}</Label>
+      {label ? <Label>{label}</Label> : null}
       <Select.Trigger>
         <Select.Value />
         <Select.Indicator />
@@ -74,6 +77,7 @@ export function InterpreterForm() {
   const [bio, setBio] = useState("");
   const [isDI, setIsDI] = useState(false);
   const [remote, setRemote] = useState(true);
+  const [hasArea, setHasArea] = useState(false);
 
   useEffect(() => {
     const s = readOnboarding();
@@ -82,6 +86,7 @@ export function InterpreterForm() {
     if (s.bio) setBio(s.bio);
     if (typeof s.isDeafInterpreter === "boolean") setIsDI(s.isDeafInterpreter);
     if (typeof s.acceptsRemote === "boolean") setRemote(s.acceptsRemote);
+    setHasArea(Boolean(s.suburb?.trim() || s.postcode?.trim()));
   }, []);
 
   function toggleDay(day: Weekday, on: boolean) {
@@ -95,6 +100,7 @@ export function InterpreterForm() {
   }
 
   const hasAvailability = Object.values(availability).some((d) => d.available);
+  const isLive = hasArea && hasAvailability;
 
   function next() {
     patchOnboarding({
@@ -108,7 +114,38 @@ export function InterpreterForm() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="flex flex-col gap-6"
+    >
+      {/* Live-status indicator (ADR live-gate: area + availability) */}
+      <div
+        className={`flex items-center gap-3 rounded-2xl border p-3 ${
+          isLive
+            ? "border-transparent bg-[var(--success-soft)]"
+            : "border-[var(--border)] bg-[var(--surface)]"
+        }`}
+      >
+        <span
+          className={`flex size-9 shrink-0 items-center justify-center rounded-full ${
+            isLive ? "text-[var(--success)]" : "bg-[var(--accent-soft)] text-[var(--accent)]"
+          }`}
+        >
+          {isLive ? <CircleCheck size={20} strokeWidth={1.5} /> : <MapPin size={18} strokeWidth={1.5} />}
+        </span>
+        <p className="text-sm leading-relaxed">
+          {isLive ? (
+            <span className="text-foreground font-medium">You&apos;ll appear in the interpreter pool.</span>
+          ) : (
+            <span className="text-muted">
+              Set your area and at least one day to appear in the pool — you can finish this later.
+            </span>
+          )}
+        </p>
+      </div>
+
       <Picker
         label="Working radius"
         value={String(radius)}
@@ -117,7 +154,10 @@ export function InterpreterForm() {
       />
 
       <div className="flex flex-col gap-2">
-        <p className="text-foreground text-sm font-medium">Availability</p>
+        <p className="text-foreground flex items-center gap-1.5 text-sm font-medium">
+          <Clock size={15} strokeWidth={1.5} className="text-muted" />
+          Availability
+        </p>
         {WEEKDAYS.map((day) => (
           <div key={day} className="flex items-center justify-between gap-3">
             <Switch isSelected={availability[day].available} onChange={(on) => toggleDay(day, on)}>
@@ -139,11 +179,6 @@ export function InterpreterForm() {
             ) : null}
           </div>
         ))}
-        {!hasAvailability ? (
-          <p className="text-muted text-xs">
-            Add at least one day to appear in the pool — you can do this later too.
-          </p>
-        ) : null}
       </div>
 
       <TextField value={bio} onChange={setBio} className="w-full">
@@ -151,27 +186,29 @@ export function InterpreterForm() {
         <Input placeholder="A line about your experience" />
       </TextField>
 
-      <Switch isSelected={isDI} onChange={setIsDI}>
-        <Switch.Control>
-          <Switch.Thumb />
-        </Switch.Control>
-        <Switch.Content>
-          <Label className="text-sm">I'm a Deaf interpreter</Label>
-        </Switch.Content>
-      </Switch>
-
-      <Switch isSelected={remote} onChange={setRemote}>
-        <Switch.Control>
-          <Switch.Thumb />
-        </Switch.Control>
-        <Switch.Content>
-          <Label className="text-sm">Available for remote bookings</Label>
-        </Switch.Content>
-      </Switch>
+      <div className="flex flex-col gap-3">
+        <Switch isSelected={isDI} onChange={setIsDI}>
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Content>
+            <Label className="text-sm">I&apos;m a Deaf interpreter</Label>
+          </Switch.Content>
+        </Switch>
+        <Switch isSelected={remote} onChange={setRemote}>
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Content>
+            <Label className="text-sm">Available for remote bookings</Label>
+          </Switch.Content>
+        </Switch>
+      </div>
 
       <Button fullWidth onPress={next}>
         Continue
+        <ArrowRight size={18} strokeWidth={1.5} />
       </Button>
-    </div>
+    </motion.div>
   );
 }
