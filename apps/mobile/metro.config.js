@@ -1,6 +1,7 @@
-// Metro config for use inside a pnpm + Turborepo monorepo.
-// Watches the workspace root and resolves hoisted deps from both node_modules trees.
+// Metro config for use inside a pnpm + Turborepo monorepo, wrapped with Uniwind
+// (Tailwind v4 for React Native) which HeroUI Native styles depend on.
 const { getDefaultConfig } = require("expo/metro-config");
+const { withUniwindConfig } = require("uniwind/metro");
 const path = require("path");
 
 const projectRoot = __dirname;
@@ -14,4 +15,7 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, "node_modules"),
 ];
 
-module.exports = config;
+module.exports = withUniwindConfig(config, {
+  cssEntryFile: "./src/global.css",
+  dtsFile: "./src/uniwind-types.d.ts",
+});

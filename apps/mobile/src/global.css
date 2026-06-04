@@ -1,3 +1,16 @@
+/* Uniwind (Tailwind v4 for RN) + HeroUI Native styles, then WaveTap brand.
+ * Order matters: tailwind → uniwind → heroui-native → WaveTap theme override.
+ * The WaveTap theme (generated from design-tokens/*.json) overrides HeroUI
+ * Native's variables with our brand in oklch. */
+@import "tailwindcss";
+@import "uniwind";
+@import "heroui-native/styles";
+@import "@wavetap/tokens/native-theme.css";
+
+/* Scan HeroUI Native's compiled component classes so Uniwind emits their styles. */
+@source "../node_modules/heroui-native/lib";
+
+/* Demo template font stacks (still referenced by constants/theme.ts on web). */
 :root {
   --font-display:
     Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,

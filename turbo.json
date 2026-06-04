@@ -7,7 +7,7 @@
     },
     "@wavetap/tokens#build": {
       "inputs": ["build.mjs", "../../design-tokens/**"],
-      "outputs": ["src/tokens.gen.ts", "src/theme.css"]
+      "outputs": ["src/tokens.gen.ts", "src/theme.css", "src/native-theme.css"]
     },
     "dev": {
       "cache": false,
