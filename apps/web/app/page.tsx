@@ -1,5 +1,3 @@
-import { GetStartedButton } from "./_components/get-started-button";
-
 export default function Home() {
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 px-6 text-center">
@@ -9,8 +7,6 @@ export default function Home() {
         A neutral, peer-to-peer way to connect with Auslan interpreters. No agencies, no
         middlemen — just match, then hand off.
       </p>
-      <GetStartedButton />
-      <p className="text-sm text-[#A8A49A]">Australia · Auslan</p>
     </main>
   );
 }
