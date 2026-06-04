@@ -5,10 +5,12 @@
 @import "tailwindcss";
 @import "uniwind";
 @import "heroui-native/styles";
+@import "heroui-native-pro/styles";
 @import "@wavetap/tokens/native-theme.css";
 
-/* Scan HeroUI Native's compiled component classes so Uniwind emits their styles. */
+/* Scan HeroUI Native (OSS + Pro) compiled classes so Uniwind emits their styles. */
 @source "../node_modules/heroui-native/lib";
+@source "../node_modules/heroui-native-pro/lib";
 
 /* Demo template font stacks (still referenced by constants/theme.ts on web). */
 :root {

@@ -71,6 +71,9 @@ importers:
       heroui-native:
         specifier: ^1.0.4
         version: 1.0.4(9b025a8cfae1190515b85ac1285c4f16)
+      heroui-native-pro:
+        specifier: 1.0.0-beta.4
+        version: 1.0.0-beta.4
       react:
         specifier: 19.2.3
         version: 19.2.3
@@ -3168,6 +3171,9 @@ packages:
 
   hermes-parser@0.35.0:
     resolution: {integrity: sha512-9JLjeHxBx8T4CAsydZR49PNZUaix+WpQJwu9p2010lu+7Kwl6D/7wYFFJxoz+aXkaaClp9Zfg6W6/zVlSJORaA==}
+
+  heroui-native-pro@1.0.0-beta.4:
+    resolution: {integrity: sha512-Yi4qvpOJ2+tvImhuYEMjKto3BF+eek7FaLbB6pk5mG34R2c+1Mj7hastwYXwIQ66qPfT6Z3lP1hJgnc/gcnI/w==}
 
   heroui-native@1.0.4:
     resolution: {integrity: sha512-XujbUhZNtUVv8bZSAgdjUstLB+p3kggK53FIfXXafLRVTcrq1VbwRcS1Cd1ijNOKPPF6Xqr+5W2n4fFV/U0wAw==}
@@ -8468,6 +8474,11 @@ snapshots:
   hermes-parser@0.35.0:
     dependencies:
       hermes-estree: 0.35.0
+
+  heroui-native-pro@1.0.0-beta.4:
+    dependencies:
+      chalk: 5.6.2
+      heroui-pro: 1.0.0-beta.11
 
   heroui-native@1.0.4(9b025a8cfae1190515b85ac1285c4f16):
     dependencies:
