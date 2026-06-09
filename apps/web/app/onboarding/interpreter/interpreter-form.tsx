@@ -4,7 +4,7 @@ import { Button, Input, Label, ListBox, Select, Switch, TextField } from "@herou
 import { ArrowRight, CircleCheck, Clock, MapPin } from "lucide-react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import {
   WEEKDAYS,
@@ -78,6 +78,7 @@ export function InterpreterForm() {
   const [isDI, setIsDI] = useState(false);
   const [remote, setRemote] = useState(true);
   const [hasArea, setHasArea] = useState(false);
+  const [pending, startTransition] = useTransition();
 
   useEffect(() => {
     const s = readOnboarding();
@@ -87,7 +88,8 @@ export function InterpreterForm() {
     if (typeof s.isDeafInterpreter === "boolean") setIsDI(s.isDeafInterpreter);
     if (typeof s.acceptsRemote === "boolean") setRemote(s.acceptsRemote);
     setHasArea(Boolean(s.suburb?.trim() || s.postcode?.trim()));
-  }, []);
+    router.prefetch("/onboarding/notifications");
+  }, [router]);
 
   function toggleDay(day: Weekday, on: boolean) {
     setAvailability((a) => ({
@@ -110,7 +112,9 @@ export function InterpreterForm() {
       isDeafInterpreter: isDI,
       acceptsRemote: remote,
     });
-    router.push("/onboarding/notifications");
+    startTransition(() => {
+      router.push("/onboarding/notifications");
+    });
   }
 
   return (
@@ -205,7 +209,7 @@ export function InterpreterForm() {
         </Switch>
       </div>
 
-      <Button fullWidth onPress={next}>
+      <Button fullWidth isPending={pending} onPress={next}>
         Continue
         <ArrowRight size={18} strokeWidth={1.5} />
       </Button>

@@ -21,6 +21,17 @@ const STEP_ORDER = [
   "/onboarding/terms",
 ];
 
+// Short orientation label per step, shown in the header.
+const STEP_LABEL: Record<string, string> = {
+  "/onboarding/welcome": "Welcome",
+  "/onboarding/start": "Get started",
+  "/onboarding/profile": "Your details",
+  "/onboarding/interpreter": "Interpreting",
+  "/onboarding/notifications": "Notifications",
+  "/onboarding/terms": "Review & finish",
+  "/onboarding/done": "All set",
+};
+
 // Explicit back targets (reverse of the forward flow). notifications → back
 // skips the interpreter step for signer-only users, mirroring the forward logic.
 function backTarget(pathname: string, mode: ReturnType<typeof readOnboarding>["mode"]): string | null {
@@ -45,6 +56,7 @@ export default function OnboardingLayout({ children }: { children: ReactNode }) 
   // click from sessionStorage, so there's no hydration mismatch.
   const showBack =
     idx > 0 && !isDone; // idx 0 = welcome → no back
+  const label = Object.entries(STEP_LABEL).find(([k]) => pathname.startsWith(k))?.[1] ?? "WaveTap";
 
   function goBack() {
     const target = backTarget(pathname, readOnboarding().mode);
@@ -66,7 +78,7 @@ export default function OnboardingLayout({ children }: { children: ReactNode }) 
             <ChevronLeft size={18} strokeWidth={1.5} />
           </Button>
         ) : null}
-        <span className="text-muted text-sm font-medium uppercase tracking-widest">WaveTap</span>
+        <span className="text-foreground text-sm font-semibold">{label}</span>
       </header>
 
       <div className="mx-auto w-full max-w-md px-6 pt-4" aria-hidden="true">

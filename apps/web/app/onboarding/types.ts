@@ -21,7 +21,8 @@ export type PreferredContact = "email" | "mobile" | "both";
 
 export type OnboardingState = {
   mode?: OnboardingMode;
-  displayName?: string;
+  firstName?: string;
+  lastName?: string;
   suburb?: string;
   postcode?: string;
   state?: string;

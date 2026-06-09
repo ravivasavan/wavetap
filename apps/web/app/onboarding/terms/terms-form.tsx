@@ -3,7 +3,8 @@
 import { Button, Checkbox, Label } from "@heroui/react";
 import { CircleAlert, Handshake, ShieldCheck, Wallet } from "lucide-react";
 import { motion } from "motion/react";
-import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 
 import { completeOnboarding } from "../actions";
 import { patchOnboarding, readOnboarding } from "../use-onboarding";
@@ -15,9 +16,14 @@ const POINTS: { Icon: typeof Handshake; text: string }[] = [
 ];
 
 export function TermsForm() {
+  const router = useRouter();
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    router.prefetch("/onboarding/done");
+  }, [router]);
 
   function finish() {
     setError(null);

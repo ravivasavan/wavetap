@@ -4,7 +4,7 @@ import { Button, Input, Label, ListBox, Select, TextField } from "@heroui/react"
 import { ArrowRight, CircleAlert, MapPin } from "lucide-react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import { isInterpreter, type PreferredContact } from "../types";
 import { patchOnboarding, readOnboarding } from "../use-onboarding";
@@ -55,42 +55,52 @@ function FieldSelect({
   );
 }
 
-export function ProfileForm({ defaultName }: { defaultName: string }) {
+export function ProfileForm() {
   const router = useRouter();
-  const [name, setName] = useState(defaultName);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [suburb, setSuburb] = useState("");
   const [postcode, setPostcode] = useState("");
   const [stateVal, setStateVal] = useState("");
   const [contact, setContact] = useState<PreferredContact>("email");
   const [mobile, setMobile] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   useEffect(() => {
     const s = readOnboarding();
-    if (s.displayName) setName(s.displayName);
+    if (s.firstName) setFirstName(s.firstName);
+    if (s.lastName) setLastName(s.lastName);
     if (s.suburb) setSuburb(s.suburb);
     if (s.postcode) setPostcode(s.postcode);
     if (s.state) setStateVal(s.state);
     if (s.preferredContact) setContact(s.preferredContact);
     if (s.mobile) setMobile(s.mobile);
-  }, []);
+    // Warm both possible next routes so navigation feels instant.
+    router.prefetch("/onboarding/interpreter");
+    router.prefetch("/onboarding/notifications");
+  }, [router]);
 
   const needsMobile = contact === "mobile" || contact === "both";
 
   function next() {
     setError(null);
-    if (!name.trim()) return setError("Please enter your name.");
+    if (!firstName.trim() || !lastName.trim())
+      return setError("Please enter your first and last name.");
     if (!suburb.trim() && !postcode.trim()) return setError("Enter your suburb or postcode.");
     if (needsMobile && !mobile.trim()) return setError("Add a mobile number, or choose Email.");
     const s = patchOnboarding({
-      displayName: name.trim(),
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       suburb: suburb.trim(),
       postcode: postcode.trim(),
       state: stateVal || undefined,
       preferredContact: contact,
       mobile: mobile.trim() || undefined,
     });
-    router.push(isInterpreter(s.mode) ? "/onboarding/interpreter" : "/onboarding/notifications");
+    startTransition(() => {
+      router.push(isInterpreter(s.mode) ? "/onboarding/interpreter" : "/onboarding/notifications");
+    });
   }
 
   return (
@@ -100,10 +110,16 @@ export function ProfileForm({ defaultName }: { defaultName: string }) {
       transition={{ duration: 0.25, ease: "easeOut" }}
       className="flex flex-col gap-4"
     >
-      <TextField value={name} onChange={setName} isRequired className="w-full">
-        <Label>Your name</Label>
-        <Input placeholder="How you'd like to appear" autoComplete="name" />
-      </TextField>
+      <div className="flex gap-3">
+        <TextField value={firstName} onChange={setFirstName} isRequired className="flex-1">
+          <Label>First name</Label>
+          <Input placeholder="First" autoComplete="given-name" />
+        </TextField>
+        <TextField value={lastName} onChange={setLastName} isRequired className="flex-1">
+          <Label>Last name</Label>
+          <Input placeholder="Last" autoComplete="family-name" />
+        </TextField>
+      </div>
 
       <div className="flex gap-3">
         <TextField value={suburb} onChange={setSuburb} className="flex-1">
@@ -154,7 +170,7 @@ export function ProfileForm({ defaultName }: { defaultName: string }) {
         </p>
       ) : null}
 
-      <Button fullWidth onPress={next}>
+      <Button fullWidth isPending={pending} onPress={next}>
         Continue
         <ArrowRight size={18} strokeWidth={1.5} />
       </Button>

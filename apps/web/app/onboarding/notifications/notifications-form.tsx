@@ -4,9 +4,16 @@ import { Button } from "@heroui/react";
 import { ArrowRight, Bell, Mail } from "lucide-react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
+import { useEffect, useTransition } from "react";
 
 export function NotificationsForm() {
   const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    router.prefetch("/onboarding/terms");
+  }, [router]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -32,7 +39,11 @@ export function NotificationsForm() {
         install it.
       </p>
 
-      <Button fullWidth onPress={() => router.push("/onboarding/terms")}>
+      <Button
+        fullWidth
+        isPending={pending}
+        onPress={() => startTransition(() => router.push("/onboarding/terms"))}
+      >
         Continue
         <ArrowRight size={18} strokeWidth={1.5} />
       </Button>
