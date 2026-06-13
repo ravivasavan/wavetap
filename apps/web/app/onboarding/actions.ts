@@ -24,6 +24,7 @@ export async function completeOnboarding(state: OnboardingState): Promise<Comple
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+  if (!user.email) return { error: "We couldn't read your email. Please sign in again." };
 
   const firstName = state.firstName?.trim();
   const lastName = state.lastName?.trim();
@@ -47,43 +48,34 @@ export async function completeOnboarding(state: OnboardingState): Promise<Comple
     state: state.state,
   });
 
-  const { error: profileError } = await supabase.from("profiles").insert({
-    id: user.id,
-    email: user.email!,
-    display_name: displayName,
-    roles,
-    active_role: activeRoleFromMode(state.mode),
-    location_suburb: state.suburb?.trim() || null,
-    location_postcode: state.postcode?.trim() || null,
-    location_state: state.state?.trim() || null,
-    location_lat: geo?.lat ?? null,
-    location_lng: geo?.lng ?? null,
-    preferred_contact: preferredContact,
-    mobile: state.mobile?.trim() || null,
-    accepted_terms_at: new Date().toISOString(),
-    tos_version: TOS_VERSION,
-    // sign_languages defaults to {auslan}; notification_* default true/false
+  // One atomic, idempotent RPC commits both rows in a single transaction
+  // (SECURITY INVOKER → own-row RLS still applies). A partial failure can no
+  // longer orphan a profiles row, and a retry after a partial success succeeds
+  // (ON CONFLICT DO UPDATE) instead of dead-ending on a duplicate key.
+  const { error } = await supabase.rpc("complete_onboarding", {
+    p_email: user.email,
+    p_display_name: displayName,
+    p_roles: roles,
+    p_active_role: activeRoleFromMode(state.mode),
+    p_location_suburb: state.suburb?.trim() || undefined,
+    p_location_postcode: state.postcode?.trim() || undefined,
+    p_location_state: state.state?.trim() || undefined,
+    p_location_lat: geo?.lat ?? undefined,
+    p_location_lng: geo?.lng ?? undefined,
+    p_preferred_contact: preferredContact,
+    p_mobile: state.mobile?.trim() || undefined,
+    p_accepted_terms_at: new Date().toISOString(),
+    p_tos_version: TOS_VERSION,
+    p_is_interpreter: roles.includes("interpreter"),
+    p_working_radius_km: state.workingRadiusKm ?? 30,
+    p_availability: state.availability ?? {},
+    p_bio: state.bio?.trim() || undefined,
+    p_is_deaf_interpreter: state.isDeafInterpreter ?? false,
+    p_accepts_remote: state.acceptsRemote ?? true,
   });
-  if (profileError) {
-    return { error: "We couldn't save your profile. Please try again." };
-  }
-
-  if (roles.includes("interpreter")) {
-    const { error: interpreterError } = await supabase.from("interpreter_profiles").insert({
-      id: user.id,
-      working_radius_km: state.workingRadiusKm ?? 30,
-      availability_pattern: state.availability ?? {},
-      bio: state.bio?.trim() || null,
-      is_deaf_interpreter: state.isDeafInterpreter ?? false,
-      accepts_remote: state.acceptsRemote ?? true,
-    });
-    if (interpreterError) {
-      // Profile saved; interpreter details can be completed later from the profile.
-      return {
-        error:
-          "Your profile was saved, but we couldn't save your interpreter details. You can finish those from your profile.",
-      };
-    }
+  if (error) {
+    console.error("[complete_onboarding]", user.id, error.message);
+    return { error: "We couldn't finish setting up your account. Please try again." };
   }
 
   redirect("/onboarding/done");
