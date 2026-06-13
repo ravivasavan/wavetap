@@ -960,6 +960,30 @@ export type Database = {
       }
       geomfromewkt: { Args: { "": string }; Returns: unknown }
       gettransactionid: { Args: never; Returns: unknown }
+      complete_onboarding: {
+        Args: {
+          p_accepted_terms_at?: string
+          p_accepts_remote?: boolean
+          p_active_role?: string
+          p_availability?: Json
+          p_bio?: string
+          p_display_name?: string
+          p_email?: string
+          p_is_deaf_interpreter?: boolean
+          p_is_interpreter?: boolean
+          p_location_lat?: number
+          p_location_lng?: number
+          p_location_postcode?: string
+          p_location_state?: string
+          p_location_suburb?: string
+          p_mobile?: string
+          p_preferred_contact?: string
+          p_roles?: string[]
+          p_tos_version?: string
+          p_working_radius_km?: number
+        }
+        Returns: undefined
+      }
       is_admin: { Args: never; Returns: boolean }
       longtransactionsenabled: { Args: never; Returns: boolean }
       populate_geometry_columns:
