@@ -11,9 +11,9 @@ honor its STOP conditions, and update your row when done.
 |------|-------|----------|--------|------------|--------|
 | 001 | Close the `profiles` privilege-escalation hole | P1 | S | — | DONE |
 | 002 | Verification baseline: CLAUDE.md, ESLint, CI, smoke tests | P1 | M | — | DONE |
-| 003 | Make onboarding completion atomic + idempotent | P2 | M | — | TODO |
-| 004 | Enforce suspension + OTP rate-limit at the auth boundary | P2 | M | 001 | TODO |
-| 005 | Dependency & version-skew cleanup (web deps, supabase-js, TS) | P3 | S | — | TODO |
+| 003 | Make onboarding completion atomic + idempotent | P2 | M | — | DONE |
+| 004 | Enforce suspension + OTP rate-limit at the auth boundary | P2 | M | 001 | DONE |
+| 005 | Dependency & version-skew cleanup (web deps, supabase-js, TS) | P3 | S | — | DONE |
 | 006 | Design spike: first booking surface (signer create + interpreter pool) | P2 | L | 001 | TODO |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (reason) | REJECTED (rationale)
