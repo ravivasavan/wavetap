@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 
+import { checkRateLimit } from "@/lib/auth/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -17,6 +18,10 @@ export async function sendOtp(_prev: LoginState, formData: FormData): Promise<Lo
     .toLowerCase();
 
   if (!email) return { error: "Please enter your email address." };
+
+  // App-layer rate limit on sign-in email sends. Returns the same generic error
+  // as every other failure path so rate-limit state isn't disclosed.
+  if (!(await checkRateLimit("otp_send", email, 5, 900))) return { error: GENERIC_ERROR };
 
   // Banned-email gate. banned_emails RLS is admin-only and the user is
   // unauthenticated here, so this must run with the service-role key.
