@@ -1,6 +1,7 @@
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { isSuspended } from "@/lib/auth/suspension";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -19,6 +20,14 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({ type, token_hash });
     if (!error) {
+      // Block suspended accounts even on a valid magic link: sign out and bounce.
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user && (await isSuspended(user.id))) {
+        await supabase.auth.signOut();
+        return NextResponse.redirect(new URL("/login?error=suspended", request.url));
+      }
       return NextResponse.redirect(new URL("/home", request.url));
     }
   }
