@@ -62,6 +62,27 @@ export type Database = {
           },
         ]
       }
+      auth_rate_limits: {
+        Row: {
+          count: number
+          key: string
+          scope: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          key: string
+          scope: string
+          window_start?: string
+        }
+        Update: {
+          count?: number
+          key?: string
+          scope?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       banned_emails: {
         Row: {
           banned_by: string | null
