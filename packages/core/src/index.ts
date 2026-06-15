@@ -39,6 +39,31 @@ export function isCompositionSatisfied(
   return deafConfirmed >= deafRequired;
 }
 
+// ── Distance (booking pool radius filter, 006 spike OQ2) ─────────────────────
+export interface LatLng {
+  lat: number;
+  lng: number;
+}
+
+/**
+ * Great-circle distance in kilometres between two lat/lng points (haversine).
+ * Used to filter open bookings against an interpreter's working radius. O(1);
+ * the pool applies it per-candidate after fetching. The scale path (PostGIS
+ * geography + GIST + ST_DWithin) supersedes this past a few hundred open
+ * bookings — see docs/design/booking-surface.md OQ2.
+ */
+export function haversineKm(a: LatLng, b: LatLng): number {
+  const R = 6371; // mean Earth radius, km
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLng = toRad(b.lng - a.lng);
+  const lat1 = toRad(a.lat);
+  const lat2 = toRad(b.lat);
+  const h =
+    Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
 // ── Interpreter "live" gate (onboarding ADR, 2026-06-03) ─────────────────────
 // An interpreter is only eligible for the pool once area + availability are set.
 export function isInterpreterLive(profile: {
