@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 import { Check, CircleAlert, Hand } from "lucide-react";
 import { useState, useTransition } from "react";
 
-import { expressInterest, withdrawInterest } from "@/app/bookings/actions";
+import { expressInterest, withdrawInterest } from "../../bookings/actions";
 
 export function InterestButton({
   bookingId,

@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/page-header";
 import { requireUser } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 
@@ -57,21 +58,18 @@ export default async function SelectInterpretersPage({
   const slotCount = Array.isArray(booking.slots) ? booking.slots.length : 1;
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-12">
-      <div className="flex flex-col gap-1">
-        <span className="text-muted text-xs uppercase tracking-wide">Select interpreters</span>
-        <h1 className="text-foreground text-2xl font-semibold">{booking.title}</h1>
-        <p className="text-muted text-sm">
-          Choose {slotCount} interpreter{slotCount === 1 ? "" : "s"}. Contact details are shared
-          with each other only once you confirm.
-        </p>
+    <>
+      <PageHeader
+        title={booking.title}
+        subtitle={`Choose ${slotCount} interpreter${slotCount === 1 ? "" : "s"}. Contact details are shared with each other only once you confirm.`}
+      />
+      <div className="max-w-md">
+        {interpreters.length === 0 ? (
+          <p className="text-muted text-sm">No interpreters have expressed interest yet.</p>
+        ) : (
+          <SelectInterpreters bookingId={id} slotCount={slotCount} interpreters={interpreters} />
+        )}
       </div>
-
-      {interpreters.length === 0 ? (
-        <p className="text-muted text-sm">No interpreters have expressed interest yet.</p>
-      ) : (
-        <SelectInterpreters bookingId={id} slotCount={slotCount} interpreters={interpreters} />
-      )}
-    </main>
+    </>
   );
 }

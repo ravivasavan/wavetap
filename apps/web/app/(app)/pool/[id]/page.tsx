@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { PageHeader } from "@/components/page-header";
 import { requireUser } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 
@@ -48,23 +49,24 @@ export default async function PoolDetailPage({ params }: { params: Promise<{ id:
   const time = [booking.start_time, booking.end_time].filter(Boolean).join(" – ");
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-12">
-      <h1 className="text-foreground text-2xl font-semibold">{booking.title}</h1>
+    <>
+      <PageHeader title={booking.title ?? "Booking"} />
+      <div className="flex max-w-md flex-col gap-6">
+        <div className="flex flex-col">
+          <Row label="Date" value={booking.booking_date} />
+          <Row label="Time" value={time} />
+          <Row label="Mode" value={booking.mode === "in_person" ? "In person" : "Remote"} />
+          <Row label="Area" value={where} />
+        </div>
 
-      <div className="flex flex-col">
-        <Row label="Date" value={booking.booking_date} />
-        <Row label="Time" value={time} />
-        <Row label="Mode" value={booking.mode === "in_person" ? "In person" : "Remote"} />
-        <Row label="Area" value={where} />
+        {isInterpreter ? (
+          <InterestButton bookingId={booking.id!} initialInterested={Boolean(interest)} />
+        ) : (
+          <p className="text-muted text-xs leading-relaxed">
+            Only interpreters can express interest in a booking.
+          </p>
+        )}
       </div>
-
-      {isInterpreter ? (
-        <InterestButton bookingId={booking.id!} initialInterested={Boolean(interest)} />
-      ) : (
-        <p className="text-muted text-xs leading-relaxed">
-          Only interpreters can express interest in a booking.
-        </p>
-      )}
-    </main>
+    </>
   );
 }
