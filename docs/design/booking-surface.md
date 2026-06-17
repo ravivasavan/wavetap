@@ -40,12 +40,13 @@ tightened (or dropped) so the raw row is never the pool's read path. Distance is
 derived from the coarse suburb centroid, not the exact lat/lng (good enough to
 bucket "~5 km" without leaking the address).
 
-**Status for the spike.** This needs a migration, so per the plan it is **scoped
-as the immediate follow-up plan, not built blind here.** The spike's `/pool`
-reads the base table behind a prominent `TODO(privacy)` marker (see
-`app/pool/page.tsx`). **This must land before the pool is exposed to real users
-or real bookings exist.** No real bookings exist yet, so the spike is safe; the
-view is the gate to launch.
+**Status: IMPLEMENTED (2026-06-17, migration `20260617002803_public_bookings_view`).**
+`public_bookings` was created as a security-definer view exposing only the safe
+columns (id, title, suburb + state, mode, date/time, slots, status, created_at —
+no signer_id, no lat/lng, no postcode, no notes/description), and the
+`bookings_select_open` policy was **dropped** so the raw table is owner /
+involved / admin only. `/pool` and `/pool/[id]` now read the view. The OQ1 hole
+is closed; the `TODO(privacy)` markers are removed.
 
 ### OQ2 — Distance filtering
 
@@ -125,7 +126,7 @@ mode. Flagged for the notifications plan.
 - `haversineKm` helper + unit test in `packages/core`.
 
 **Explicitly NOT in this spike (each is its own later plan):**
-- The `public_bookings` privacy view (OQ1) — **immediate follow-up, launch blocker.**
+- ~~The `public_bookings` privacy view (OQ1)~~ — **DONE** (migration `20260617002803`); pool reads the view, base table locked down.
 - Express-interest, signer selection, confirmation, contact exchange.
 - Notifications / Edge Functions.
 - Multi-slot team-composition editor (OQ3).
@@ -134,7 +135,7 @@ mode. Flagged for the notifications plan.
 
 ## Build order after this spike
 
-1. `public_bookings` privacy view (OQ1) — unblocks exposing the pool.
+1. ~~`public_bookings` privacy view (OQ1)~~ — **DONE** (migration `20260617002803`).
 2. Express-interest (`booking_interests`).
 3. Selection + confirmation (`booking_confirmations`, composition check).
 4. Notifications (with the TZ fix from OQ4).

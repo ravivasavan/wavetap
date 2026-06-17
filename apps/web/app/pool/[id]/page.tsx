@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="flex items-baseline justify-between gap-4 border-b border-[var(--border)] py-2">
       <span className="text-muted text-sm">{label}</span>
-      <span className="text-foreground text-sm">{value}</span>
+      <span className="text-foreground text-sm">{value ?? "—"}</span>
     </div>
   );
 }
@@ -17,14 +17,12 @@ export default async function PoolDetailPage({ params }: { params: Promise<{ id:
   await requireUser();
 
   const supabase = await createClient();
-  // TODO(privacy): coarse fields only, read via public_bookings once it exists
-  // (see docs/design/booking-surface.md OQ1). Deliberately NOT selecting
-  // location_lat/lng, postcode, or notes here.
+  // Coarse fields only, via the public_bookings view (open-only; exact location
+  // and notes are withheld at the view — see docs/design/booking-surface.md OQ1).
   const { data: booking } = await supabase
-    .from("bookings")
+    .from("public_bookings")
     .select("id, title, booking_date, start_time, end_time, mode, location_suburb, location_state")
     .eq("id", id)
-    .eq("status", "open")
     .maybeSingle();
 
   if (!booking) notFound();

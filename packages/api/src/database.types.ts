@@ -609,6 +609,48 @@ export type Database = {
       }
     }
     Views: {
+      public_bookings: {
+        Row: {
+          booking_date: string | null
+          created_at: string | null
+          end_time: string | null
+          id: string | null
+          location_state: string | null
+          location_suburb: string | null
+          mode: string | null
+          slots: Json | null
+          start_time: string | null
+          status: string | null
+          title: string | null
+        }
+        Insert: {
+          booking_date?: string | null
+          created_at?: string | null
+          end_time?: string | null
+          id?: string | null
+          location_state?: string | null
+          location_suburb?: string | null
+          mode?: string | null
+          slots?: Json | null
+          start_time?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Update: {
+          booking_date?: string | null
+          created_at?: string | null
+          end_time?: string | null
+          id?: string | null
+          location_state?: string | null
+          location_suburb?: string | null
+          mode?: string | null
+          slots?: Json | null
+          start_time?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
       geography_columns: {
         Row: {
           coord_dimension: number | null
@@ -1006,6 +1048,10 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
+      is_interested_or_confirmed: {
+        Args: { p_booking_id: string }
+        Returns: boolean
+      }
       longtransactionsenabled: { Args: never; Returns: boolean }
       populate_geometry_columns:
         | { Args: { tbl_oid: unknown; use_typmod?: boolean }; Returns: number }
