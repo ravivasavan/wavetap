@@ -3,11 +3,26 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { isCompositionSatisfied, type Slot } from "@wavetap/core";
+
 import { requireUser } from "@/lib/auth/profile";
 import { geocodeAU } from "@/lib/geocode";
 import { createNotification } from "@/lib/notifications";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+
+/** A user's shareable contact line: email, plus mobile when they prefer it. */
+function shareableContact(p: {
+  email: string;
+  mobile: string | null;
+  preferred_contact: string;
+}): string {
+  const out = [p.email];
+  if ((p.preferred_contact === "mobile" || p.preferred_contact === "both") && p.mobile) {
+    out.push(p.mobile);
+  }
+  return out.join(" · ");
+}
 
 export type CreateBookingInput = {
   title: string;
@@ -128,6 +143,104 @@ export async function expressInterest(bookingId: string): Promise<InterestResult
 
   revalidatePath(`/pool/${bookingId}`);
   return { ok: true };
+}
+
+export type ConfirmResult = { error: string } | void;
+
+/**
+ * Signer confirms one or more interested interpreters for their booking.
+ * Verifies ownership + that the picks expressed interest, enforces team
+ * composition (isCompositionSatisfied), snapshots both parties' contacts into
+ * booking_confirmations (interpreter contact via the admin client — the signer
+ * can't read it under RLS), flips the booking to confirmed, and notifies each
+ * confirmed interpreter. RLS booking_confirmations_insert_signer also guards
+ * the insert to the booking's signer.
+ */
+export async function confirmInterpreters(
+  bookingId: string,
+  interpreterIds: string[],
+): Promise<ConfirmResult> {
+  const user = await requireUser();
+  if (interpreterIds.length === 0) return { error: "Select at least one interpreter." };
+
+  const supabase = await createClient();
+  const { data: booking } = await supabase
+    .from("bookings")
+    .select("id, signer_id, title, status, slots")
+    .eq("id", bookingId)
+    .maybeSingle();
+  if (!booking || booking.signer_id !== user.id) return { error: "Booking not found." };
+  if (booking.status !== "open") {
+    return { error: "This booking is no longer open for selection." };
+  }
+
+  // Only let the signer confirm interpreters who actually expressed interest.
+  const { data: interests } = await supabase
+    .from("booking_interests")
+    .select("interpreter_id")
+    .eq("booking_id", bookingId);
+  const interestedIds = new Set((interests ?? []).map((i) => i.interpreter_id));
+  if (!interpreterIds.every((id) => interestedIds.has(id))) {
+    return { error: "One of the selected interpreters is no longer available." };
+  }
+
+  const { data: signerProfile } = await supabase
+    .from("profiles")
+    .select("email, mobile, preferred_contact")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (!signerProfile) return { error: "We couldn't read your contact details." };
+
+  // Interpreters' contact + deaf flag need the admin client (own-row RLS hides
+  // others' profiles from the signer).
+  const admin = createAdminClient();
+  const [{ data: interpreters }, { data: interpreterMeta }] = await Promise.all([
+    admin.from("profiles").select("id, email, mobile, preferred_contact").in("id", interpreterIds),
+    admin.from("interpreter_profiles").select("id, is_deaf_interpreter").in("id", interpreterIds),
+  ]);
+  const deafById = new Map((interpreterMeta ?? []).map((m) => [m.id, m.is_deaf_interpreter]));
+
+  const slots = (booking.slots as Slot[] | null) ?? [];
+  const confirmed = interpreterIds.map((id) => ({ isDeafInterpreter: deafById.get(id) ?? false }));
+  if (!isCompositionSatisfied(slots, confirmed)) {
+    return {
+      error: `This booking needs exactly ${slots.length} interpreter${slots.length === 1 ? "" : "s"} matching its requested composition.`,
+    };
+  }
+
+  const signerContact = shareableContact(signerProfile);
+  const rows = interpreterIds.map((id) => {
+    const ip = (interpreters ?? []).find((x) => x.id === id);
+    return {
+      booking_id: bookingId,
+      interpreter_id: id,
+      signer_contact_shared: signerContact,
+      interpreter_contact_shared: ip ? shareableContact(ip) : "",
+    };
+  });
+  const { error: confErr } = await supabase.from("booking_confirmations").insert(rows);
+  if (confErr) {
+    console.error("[confirmInterpreters]", user.id, bookingId, confErr.message);
+    return { error: "We couldn't confirm the selection. Please try again." };
+  }
+
+  await supabase.from("bookings").update({ status: "confirmed" }).eq("id", bookingId);
+
+  for (const id of interpreterIds) {
+    try {
+      await createNotification({
+        userId: id,
+        type: "booking_confirmed",
+        title: "You've been confirmed for a booking",
+        body: `You're confirmed for "${booking.title}". Signer contact: ${signerContact}.`,
+        metadata: { booking_id: bookingId },
+      });
+    } catch (e) {
+      console.error("[confirmInterpreters:notify]", id, e);
+    }
+  }
+
+  redirect(`/bookings/${bookingId}`);
 }
 
 /** Interpreter withdraws interest (RLS booking_interests_delete_own). */
