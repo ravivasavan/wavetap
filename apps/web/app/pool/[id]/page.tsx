@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 
+import { InterestButton } from "./interest-button";
+
 function Row({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="flex items-baseline justify-between gap-4 border-b border-[var(--border)] py-2">
@@ -14,7 +16,7 @@ function Row({ label, value }: { label: string; value: string | null }) {
 
 export default async function PoolDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  await requireUser();
+  const user = await requireUser();
 
   const supabase = await createClient();
   // Coarse fields only, via the public_bookings view (open-only; exact location
@@ -26,6 +28,18 @@ export default async function PoolDetailPage({ params }: { params: Promise<{ id:
     .maybeSingle();
 
   if (!booking) notFound();
+
+  // Is the viewer an interpreter, and have they already expressed interest?
+  const [{ data: profile }, { data: interest }] = await Promise.all([
+    supabase.from("profiles").select("roles").eq("id", user.id).maybeSingle(),
+    supabase
+      .from("booking_interests")
+      .select("id")
+      .eq("booking_id", id)
+      .eq("interpreter_id", user.id)
+      .maybeSingle(),
+  ]);
+  const isInterpreter = (profile?.roles ?? []).includes("interpreter");
 
   const where =
     booking.mode === "in_person"
@@ -44,9 +58,13 @@ export default async function PoolDetailPage({ params }: { params: Promise<{ id:
         <Row label="Area" value={where} />
       </div>
 
-      <p className="text-muted text-xs leading-relaxed">
-        Expressing interest is coming next — for now this is a read-only preview of the pool.
-      </p>
+      {isInterpreter ? (
+        <InterestButton bookingId={booking.id!} initialInterested={Boolean(interest)} />
+      ) : (
+        <p className="text-muted text-xs leading-relaxed">
+          Only interpreters can express interest in a booking.
+        </p>
+      )}
     </main>
   );
 }
