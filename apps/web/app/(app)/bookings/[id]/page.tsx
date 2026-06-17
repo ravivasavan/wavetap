@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { PageHeader } from "@/components/page-header";
 import { requireUser } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 
@@ -53,12 +54,9 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
   const time = [booking.start_time, booking.end_time].filter(Boolean).join(" – ");
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-12">
-      <div className="flex flex-col gap-1">
-        <span className="text-muted text-xs uppercase tracking-wide">{booking.status}</span>
-        <h1 className="text-foreground text-2xl font-semibold">{booking.title}</h1>
-      </div>
-
+    <>
+      <PageHeader title={booking.title} subtitle={<span className="uppercase tracking-wide">{booking.status}</span>} />
+      <div className="flex max-w-md flex-col gap-6">
       <div className="flex flex-col">
         <Row label="Date" value={booking.booking_date} />
         <Row label="Time" value={time} />
@@ -102,6 +100,7 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
           ) : null}
         </section>
       ) : null}
-    </main>
+      </div>
+    </>
   );
 }

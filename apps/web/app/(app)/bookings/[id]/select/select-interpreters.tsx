@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 import { Check, CircleAlert } from "lucide-react";
 import { useState, useTransition } from "react";
 
-import { confirmInterpreters } from "@/app/bookings/actions";
+import { confirmInterpreters } from "../../actions";
 
 type Interpreter = {
   id: string;

@@ -1,5 +1,8 @@
-import Link from "next/link";
+import { LayoutList } from "lucide-react";
 
+import { BookingCard } from "@/components/booking-card";
+import { EmptyState } from "@/components/empty-state";
+import { PageHeader } from "@/components/page-header";
 import { requireUser } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,14 +19,15 @@ export default async function PoolPage() {
     .order("booking_date", { ascending: true });
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-12">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-foreground text-2xl font-semibold">Open bookings</h1>
-        <p className="text-muted text-sm">Bookings looking for an interpreter.</p>
-      </div>
+    <>
+      <PageHeader title="Open bookings" subtitle="Bookings looking for an interpreter." />
 
       {!bookings || bookings.length === 0 ? (
-        <p className="text-muted text-sm">No open bookings right now. Check back soon.</p>
+        <EmptyState
+          icon={<LayoutList size={28} strokeWidth={1.5} />}
+          title="No open bookings right now"
+          body="When a signer posts a booking that needs an interpreter, it'll show up here."
+        />
       ) : (
         <ul className="flex flex-col gap-3">
           {bookings.map((b) => {
@@ -33,20 +37,16 @@ export default async function PoolPage() {
                 : "Remote";
             return (
               <li key={b.id}>
-                <Link
+                <BookingCard
                   href={`/pool/${b.id}`}
-                  className="block rounded-2xl border border-[var(--border)] p-4 transition-colors hover:bg-[var(--surface-secondary)]"
-                >
-                  <div className="text-foreground font-medium">{b.title}</div>
-                  <div className="text-muted mt-1 text-sm">
-                    {b.booking_date} · {b.start_time?.slice(0, 5)} · {where}
-                  </div>
-                </Link>
+                  title={b.title ?? "Booking"}
+                  meta={`${b.booking_date} · ${b.start_time?.slice(0, 5)} · ${where}`}
+                />
               </li>
             );
           })}
         </ul>
       )}
-    </main>
+    </>
   );
 }

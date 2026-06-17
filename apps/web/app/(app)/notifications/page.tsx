@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { PageHeader } from "@/components/page-header";
 import { requireUser } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 
@@ -28,17 +29,19 @@ export default async function NotificationsPage() {
   const hasUnread = items.some((n) => !n.read);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-12">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-foreground text-2xl font-semibold">Notifications</h1>
-        {hasUnread ? (
-          <form action={markAllNotificationsRead}>
-            <button type="submit" className="text-muted hover:text-foreground text-sm underline">
-              Mark all read
-            </button>
-          </form>
-        ) : null}
-      </div>
+    <>
+      <PageHeader
+        title="Notifications"
+        action={
+          hasUnread ? (
+            <form action={markAllNotificationsRead}>
+              <button type="submit" className="text-muted hover:text-foreground text-sm underline">
+                Mark all read
+              </button>
+            </form>
+          ) : null
+        }
+      />
 
       {items.length === 0 ? (
         <p className="text-muted text-sm">Nothing yet. We&apos;ll let you know when there&apos;s news.</p>
@@ -74,10 +77,6 @@ export default async function NotificationsPage() {
           })}
         </ul>
       )}
-
-      <Link href="/home" className="text-muted hover:text-foreground text-sm underline">
-        Back to home
-      </Link>
-    </main>
+    </>
   );
 }
