@@ -7,16 +7,12 @@ export default async function PoolPage() {
   await requireUser();
 
   const supabase = await createClient();
-  // TODO(privacy): read via a `public_bookings` view, not the raw table — see
-  // docs/design/booking-surface.md OQ1. bookings_select_open currently exposes
-  // the FULL row (exact lat/lng, postcode, notes) to every authed user. The
-  // view is a launch blocker for the pool. Safe in the spike (no real bookings),
-  // and this query is restricted to coarse columns, but the policy itself must
-  // be tightened before real users see this.
+  // Reads the public_bookings view (coarse, open-only, exact location / notes
+  // withheld). The base table no longer exposes open rows broadly — see
+  // docs/design/booking-surface.md OQ1.
   const { data: bookings } = await supabase
-    .from("bookings")
+    .from("public_bookings")
     .select("id, title, location_suburb, location_state, booking_date, start_time, mode")
-    .eq("status", "open")
     .order("booking_date", { ascending: true });
 
   return (

@@ -32,7 +32,10 @@ as $$
     );
 $$;
 
-revoke execute on function public.is_interested_or_confirmed(uuid) from anon;
+-- Functions default to EXECUTE for PUBLIC; revoke from PUBLIC (covers anon) and
+-- grant only to authenticated (matches the is_admin() posture). The RLS policy
+-- machinery still evaluates it regardless of the caller's grant.
+revoke execute on function public.is_interested_or_confirmed(uuid) from public;
 grant execute on function public.is_interested_or_confirmed(uuid) to authenticated;
 
 alter policy bookings_select_involved on public.bookings
