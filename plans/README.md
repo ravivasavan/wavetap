@@ -14,7 +14,7 @@ honor its STOP conditions, and update your row when done.
 | 003 | Make onboarding completion atomic + idempotent | P2 | M | — | DONE |
 | 004 | Enforce suspension + OTP rate-limit at the auth boundary | P2 | M | 001 | DONE |
 | 005 | Dependency & version-skew cleanup (web deps, supabase-js, TS) | P3 | S | — | DONE |
-| 006 | Design spike: first booking surface (signer create + interpreter pool) | P2 | L | 001 | DONE (spike; live create→read walkthrough + public_bookings view pending) |
+| 006 | Design spike: first booking surface (signer create + interpreter pool) | P2 | L | 001 | DONE (spike validated live; OQ1 public_bookings view shipped) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (reason) | REJECTED (rationale)
 
