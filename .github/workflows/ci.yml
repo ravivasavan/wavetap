@@ -6,6 +6,11 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # Job-level so the HeroUI Pro postinstall (which downloads Pro artifacts
+    # during `pnpm install`, not at build) can authenticate. Without it on the
+    # install step, the private @heroui-pro packages never resolve.
+    env:
+      HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -25,4 +30,3 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
           SUPABASE_SERVICE_ROLE_KEY: ci-placeholder-service-key
           NEXT_PUBLIC_APP_URL: https://wavetap.app
-          HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}
