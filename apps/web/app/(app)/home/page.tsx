@@ -61,7 +61,7 @@ export default async function HomePage() {
         <PageHeader title={`Hi, ${firstName}`} subtitle="Your interpreter dashboard." />
 
         {!isLive ? (
-          <div className="mb-6 rounded-2xl border border-[var(--accent)] bg-[var(--surface-secondary)] p-4">
+          <div className="bg-surface mb-6 rounded-2xl border border-[var(--accent)] p-4 shadow-[var(--surface-shadow)]">
             <p className="text-foreground text-sm font-medium">You&apos;re not live in the pool yet</p>
             <p className="text-muted mt-1 text-sm">
               Set your working area and availability so signers can find you.

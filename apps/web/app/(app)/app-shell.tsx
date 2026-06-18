@@ -28,7 +28,7 @@ export function AppShell({
   return (
     <AppLayout
       navigate={router.push}
-      sidebarVariant="inset"
+      sidebarVariant="sidebar"
       sidebarCollapsible="icon"
       defaultSidebarOpen={defaultSidebarOpen}
       sidebar={<AppSidebar user={user} />}

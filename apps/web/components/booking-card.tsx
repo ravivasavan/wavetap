@@ -15,7 +15,7 @@ export function BookingCard({
   return (
     <Link
       href={href}
-      className="block rounded-2xl border border-[var(--border)] p-4 transition-colors hover:bg-[var(--surface-secondary)]"
+      className="bg-surface block rounded-2xl border border-[var(--border)] p-4 shadow-[var(--surface-shadow)] transition-shadow hover:shadow-[var(--overlay-shadow)]"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="text-foreground font-medium">{title}</div>
