@@ -11,3 +11,36 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 }
+
+/* ---------------------------------------------------------------------------
+ * App-shell fidelity overrides (HeroUI Pro dashboard look, WaveTap palette).
+ * Unlayered, so they win over HeroUI's layered component CSS. Keep these tied
+ * to the brand tokens — no literal colors.
+ * ------------------------------------------------------------------------- */
+
+/* Sidebar vertical stroke: use the brand border for a clean separator instead
+   of HeroUI's faint default rgba edge. (Default `sidebar` variant paints
+   `box-shadow: inset -1px 0 0 var(--sidebar-edge-outline)`.) */
+.sidebar {
+  --sidebar-edge-outline: var(--border);
+}
+
+/* Active nav item: an elevated white pill (matches the template), not the flat
+   `bg-default` gray that vanishes on the grey canvas. Hover is a quieter fill. */
+.sidebar__menu-item[data-current="true"] .sidebar__menu-item-content {
+  background-color: var(--surface);
+  box-shadow: var(--surface-shadow);
+}
+@media (hover: hover) {
+  .sidebar__menu-item:not([data-current="true"]):hover .sidebar__menu-item-content,
+  .sidebar__menu-item:not([data-current="true"])[data-hovered="true"] .sidebar__menu-item-content {
+    background-color: var(--surface);
+  }
+}
+
+/* Sticky navbar: a hairline bottom separator so content scrolls cleanly under
+   it, and the brand canvas behind it. */
+.app-layout__header {
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
+}

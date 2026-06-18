@@ -15,10 +15,10 @@
  */
 @layer theme {
   @variant light {
-      --background: oklch(0.9845 0.0026 106.45);
+      --background: oklch(0.9668 0.0054 95.1);
       --foreground: oklch(0.3494 0.011 84.59);
       --surface: oklch(1 0 0);
-      --surface-secondary: oklch(0.9668 0.0054 95.1);
+      --surface-secondary: oklch(0.9845 0.0026 106.45);
       --overlay: oklch(1 0 0);
       --muted: oklch(0.7191 0.0149 88.72);
       --default: oklch(0.9668 0.0054 95.1);
@@ -37,10 +37,10 @@
       --radius: 0.75rem;
   }
   @variant dark {
-      --background: oklch(0.9845 0.0026 106.45);
+      --background: oklch(0.9668 0.0054 95.1);
       --foreground: oklch(0.3494 0.011 84.59);
       --surface: oklch(1 0 0);
-      --surface-secondary: oklch(0.9668 0.0054 95.1);
+      --surface-secondary: oklch(0.9845 0.0026 106.45);
       --overlay: oklch(1 0 0);
       --muted: oklch(0.7191 0.0149 88.72);
       --default: oklch(0.9668 0.0054 95.1);

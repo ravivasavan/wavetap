@@ -13,10 +13,10 @@
   color-scheme: light;
 
   /* Brand → HeroUI semantic roles */
-  --background: #FAFAF8;
+  --background: #F5F4F0;
   --foreground: #3D3A34;
   --surface: #FFFFFF;
-  --surface-secondary: #F5F4F0;
+  --surface-secondary: #FAFAF8;
   --overlay: #FFFFFF;
   --muted: #A8A49A;
   --default: #F5F4F0;
