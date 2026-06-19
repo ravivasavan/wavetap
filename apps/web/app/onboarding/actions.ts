@@ -31,7 +31,7 @@ export async function completeOnboarding(state: OnboardingState): Promise<Comple
   const displayName = [firstName, lastName].filter(Boolean).join(" ");
   const preferredContact = state.preferredContact ?? "email";
 
-  if (!state.mode) return { error: "Please choose how you'll use WaveTap." };
+  if (!state.mode) return { error: "Please choose how you'll use Wavetap." };
   if (!firstName || !lastName) return { error: "Please enter your first and last name." };
   if (!state.suburb?.trim() && !state.postcode?.trim()) {
     return { error: "Please enter your suburb or postcode." };

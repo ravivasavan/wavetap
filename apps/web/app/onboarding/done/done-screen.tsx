@@ -54,7 +54,7 @@ export function DoneScreen({
       </div>
 
       <Button fullWidth onPress={() => router.push("/home")}>
-        Go to WaveTap
+        Go to Wavetap
         <ArrowRight size={18} strokeWidth={1.5} />
       </Button>
     </motion.div>

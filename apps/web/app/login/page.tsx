@@ -27,7 +27,7 @@ export default async function LoginPage({
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-6 px-6">
       <div className="flex flex-col gap-2 text-center">
-        <p className="text-muted text-sm font-medium uppercase tracking-widest">WaveTap</p>
+        <p className="text-muted text-sm font-medium uppercase tracking-widest">Wavetap</p>
         <h1 className="text-foreground text-2xl font-semibold">Sign in</h1>
         <p className="text-muted text-sm">
           Enter your email — we&apos;ll send a one-time code and a sign-in link. No password.

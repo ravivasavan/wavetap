@@ -8,7 +8,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "WaveTap — Wave. Tap. Book.",
+  title: "Wavetap — Wave. Tap. Book.",
   description:
     "Peer-to-peer platform connecting Deaf and Hard of Hearing people with Auslan interpreters. Australia.",
 };

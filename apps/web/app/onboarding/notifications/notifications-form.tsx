@@ -35,7 +35,7 @@ export function NotificationsForm() {
 
       <p className="text-muted flex items-start gap-1.5 text-xs leading-relaxed">
         <Bell size={14} strokeWidth={1.5} className="mt-0.5 shrink-0" />
-        Push notifications arrive on the WaveTap mobile app — you&apos;ll set those up when you
+        Push notifications arrive on the Wavetap mobile app — you&apos;ll set those up when you
         install it.
       </p>
 

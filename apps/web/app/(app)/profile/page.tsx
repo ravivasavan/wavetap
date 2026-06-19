@@ -74,7 +74,7 @@ export default async function ProfilePage() {
           <div>
             <p className="text-foreground text-sm font-medium">Roles</p>
             <p className="text-muted mt-1 text-sm">
-              You&apos;re using WaveTap as{" "}
+              You&apos;re using Wavetap as{" "}
               <span className="text-foreground">{profile?.active_role}</span>
               {isBoth ? " (you have both roles)." : "."}
             </p>
