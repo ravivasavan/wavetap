@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { AgentationDev } from "@/components/agentation-dev";
+
 // Self-hosted Inter (09_DESIGN_SYSTEM). Exposed as --font-inter, which
 // globals.css folds into the token --font-sans stack.
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -16,7 +18,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <AgentationDev />
+      </body>
     </html>
   );
 }
