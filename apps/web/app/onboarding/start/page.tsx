@@ -10,7 +10,7 @@ export default async function StartPage() {
   if (await userHasProfile(user.id)) redirect("/home");
   return (
     <OnboardingShell
-      title="What brings you to WaveTap?"
+      title="What brings you to Wavetap?"
       subtitle="Pick where you'd like to start — you can add the other anytime."
     >
       <StartForm />

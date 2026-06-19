@@ -12,10 +12,11 @@ import {
   LayoutList,
   Settings,
   UserRound,
-  Waves,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type { ComponentType } from "react";
+
+import { Logomark } from "@/components/logomark";
 
 import { AccountDropdown, initialsOf } from "./account-menu";
 import type { ShellUser } from "./app-shell";
@@ -69,8 +70,10 @@ function SidebarInner({ user }: { user: ShellUser }) {
     <>
       <Sidebar.Header>
         <div className="flex items-center gap-2 px-1 py-1.5">
-          <Waves size={20} className="text-accent" strokeWidth={1.75} />
-          <span className="text-foreground font-semibold tracking-tight">WaveTap</span>
+          <Logomark size={20} className="text-accent shrink-0" />
+          <span data-sidebar="label" className="text-foreground font-semibold tracking-tight">
+            Wavetap
+          </span>
         </div>
       </Sidebar.Header>
       <Sidebar.Content>

@@ -56,7 +56,7 @@ export default function OnboardingLayout({ children }: { children: ReactNode }) 
   // click from sessionStorage, so there's no hydration mismatch.
   const showBack =
     idx > 0 && !isDone; // idx 0 = welcome → no back
-  const label = Object.entries(STEP_LABEL).find(([k]) => pathname.startsWith(k))?.[1] ?? "WaveTap";
+  const label = Object.entries(STEP_LABEL).find(([k]) => pathname.startsWith(k))?.[1] ?? "Wavetap";
 
   function goBack() {
     const target = backTarget(pathname, readOnboarding().mode);

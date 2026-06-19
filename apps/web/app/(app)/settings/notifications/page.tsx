@@ -15,7 +15,7 @@ export default async function NotificationSettingsPage() {
 
   return (
     <>
-      <PageHeader title="Notifications" subtitle="Choose how WaveTap reaches you." />
+      <PageHeader title="Notifications" subtitle="Choose how Wavetap reaches you." />
       <div className="max-w-md">
         <NotificationForm
           initial={{

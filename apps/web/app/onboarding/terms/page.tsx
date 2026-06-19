@@ -9,7 +9,7 @@ export default async function TermsPage() {
   const user = await requireUser();
   if (await userHasProfile(user.id)) redirect("/home");
   return (
-    <OnboardingShell title="One last thing" subtitle="How WaveTap works, in short.">
+    <OnboardingShell title="One last thing" subtitle="How Wavetap works, in short.">
       <TermsForm />
     </OnboardingShell>
   );

@@ -5,6 +5,8 @@ import { Avatar, Button } from "@heroui/react";
 import { Bell } from "lucide-react";
 import Link from "next/link";
 
+import { Logomark } from "@/components/logomark";
+
 import { AccountDropdown, initialsOf } from "./account-menu";
 import type { ShellUser } from "./app-shell";
 
@@ -22,8 +24,12 @@ export function AppNavbar({ user }: { user: ShellUser }) {
       <Navbar.Header>
         <AppLayout.MenuToggle />
         <Sidebar.Trigger />
-        <Link href="/home" className="text-foreground ml-1 font-semibold tracking-tight md:hidden">
-          WaveTap
+        <Link
+          href="/home"
+          className="text-foreground ml-1 inline-flex items-center gap-1.5 font-semibold tracking-tight md:hidden"
+        >
+          <Logomark size={18} className="text-accent" />
+          Wavetap
         </Link>
         <Navbar.Spacer />
 

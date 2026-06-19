@@ -9,7 +9,7 @@ export default async function WelcomePage() {
   const user = await requireUser();
   if (await userHasProfile(user.id)) redirect("/home");
   return (
-    <OnboardingShell title="Welcome to WaveTap" subtitle="Wave. Tap. Book.">
+    <OnboardingShell title="Welcome to Wavetap" subtitle="Wave. Tap. Book.">
       <WelcomeIntro />
     </OnboardingShell>
   );

@@ -10,7 +10,7 @@ import { completeOnboarding } from "../actions";
 import { patchOnboarding, readOnboarding } from "../use-onboarding";
 
 const POINTS: { Icon: typeof Handshake; text: string }[] = [
-  { Icon: Handshake, text: "WaveTap connects you directly with the other person, then steps aside." },
+  { Icon: Handshake, text: "Wavetap connects you directly with the other person, then steps aside." },
   { Icon: Wallet, text: "Scheduling and payment happen between you, off-platform." },
   { Icon: ShieldCheck, text: "We don't employ, vet, or guarantee either party." },
 ];
@@ -57,7 +57,7 @@ export function TermsForm() {
           <Checkbox.Indicator />
         </Checkbox.Control>
         <Checkbox.Content>
-          <Label>I agree to the WaveTap Terms of Service</Label>
+          <Label>I agree to the Wavetap Terms of Service</Label>
         </Checkbox.Content>
       </Checkbox>
 
