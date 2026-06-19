@@ -44,3 +44,18 @@
   background-color: var(--background);
   border-bottom: 1px solid var(--border);
 }
+
+/* Sidebar footer account block: hover fill, and collapse to a centered avatar
+   in icon mode (the name/role/chevron hide in sync with HeroUI's own labels). */
+@media (hover: hover) {
+  .account-trigger:hover {
+    background-color: var(--surface);
+  }
+}
+.sidebar[data-state="collapsed"] .account-trigger__meta {
+  display: none;
+}
+.sidebar[data-state="collapsed"] .account-trigger {
+  justify-content: center;
+  padding-inline: 0;
+}
