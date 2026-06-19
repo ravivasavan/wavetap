@@ -40,8 +40,30 @@ function primaryNav(activeRole: string): NavItem[] {
 
 function SidebarInner({ user }: { user: ShellUser }) {
   const pathname = usePathname();
-  const isCurrent = (href: string) =>
-    href === "/home" ? pathname === "/home" : pathname === href || pathname.startsWith(`${href}/`);
+
+  // Only the single best-matching item is "current": a plain prefix test lights
+  // up both /bookings and /bookings/new at once, since the latter is a sibling
+  // nav item, not a sub-page. Longest match wins (/home is exact-only).
+  const allHrefs = [
+    ...primaryNav(user.activeRole).map((n) => n.href),
+    "/notifications",
+    "/profile",
+    "/settings",
+  ];
+  const matchLen = (href: string) => {
+    if (href === "/home") return pathname === "/home" ? href.length : -1;
+    return pathname === href || pathname.startsWith(`${href}/`) ? href.length : -1;
+  };
+  let activeHref: string | null = null;
+  let bestLen = 0;
+  for (const href of allHrefs) {
+    const len = matchLen(href);
+    if (len > bestLen) {
+      bestLen = len;
+      activeHref = href;
+    }
+  }
+  const isCurrent = (href: string) => href === activeHref;
 
   return (
     <>
