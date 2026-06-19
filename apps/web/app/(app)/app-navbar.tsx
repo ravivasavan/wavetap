@@ -1,41 +1,21 @@
 "use client";
 
 import { AppLayout, Navbar, Sidebar } from "@heroui-pro/react";
-import { Avatar, Button, Dropdown, Label } from "@heroui/react";
+import { Avatar, Button } from "@heroui/react";
 import { Bell } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import type { Key } from "react";
 
-import { signOut } from "@/app/auth/actions";
-
-import { switchActiveRole } from "./account/actions";
+import { AccountDropdown, initialsOf } from "./account-menu";
 import type { ShellUser } from "./app-shell";
 
-function initialsOf(name: string, email: string): string {
-  const src = (name.trim() || email).trim();
-  const parts = src.split(/\s+/).filter(Boolean);
-  const first = parts[0] ?? "";
-  const last = parts[parts.length - 1] ?? "";
-  const letters = parts.length > 1 ? (first[0] ?? "") + (last[0] ?? "") : src.slice(0, 2);
-  return (letters || "U").toUpperCase();
+function primaryAction(activeRole: string): { label: string; href: string } {
+  return activeRole === "interpreter"
+    ? { label: "Browse pool", href: "/pool" }
+    : { label: "Post a booking", href: "/bookings/new" };
 }
 
 export function AppNavbar({ user }: { user: ShellUser }) {
-  const router = useRouter();
-  const isBoth = user.roles.includes("signer") && user.roles.includes("interpreter");
-  const otherRole = user.activeRole === "signer" ? "interpreter" : "signer";
-
-  async function onAction(key: Key) {
-    if (key === "profile") router.push("/profile");
-    else if (key === "settings") router.push("/settings");
-    else if (key === "switch") {
-      await switchActiveRole(otherRole);
-      router.refresh();
-    } else if (key === "logout") {
-      await signOut();
-    }
-  }
+  const cta = primaryAction(user.activeRole);
 
   return (
     <Navbar maxWidth="full">
@@ -46,6 +26,13 @@ export function AppNavbar({ user }: { user: ShellUser }) {
           WaveTap
         </Link>
         <Navbar.Spacer />
+
+        <Link
+          href={cta.href}
+          className="bg-accent text-accent-foreground inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90"
+        >
+          {cta.label}
+        </Link>
 
         <Link
           href="/notifications"
@@ -60,31 +47,14 @@ export function AppNavbar({ user }: { user: ShellUser }) {
           ) : null}
         </Link>
 
-        <Dropdown>
-          <Button variant="ghost" aria-label="Account menu" className="size-9 rounded-full p-0">
+        {/* Mobile-only: desktop account actions live in the sidebar footer. */}
+        <AccountDropdown user={user}>
+          <Button variant="ghost" aria-label="Account menu" className="size-9 rounded-full p-0 md:hidden">
             <Avatar size="sm">
               <Avatar.Fallback>{initialsOf(user.displayName, user.email)}</Avatar.Fallback>
             </Avatar>
           </Button>
-          <Dropdown.Popover>
-            <Dropdown.Menu onAction={onAction}>
-              <Dropdown.Item id="profile" textValue="Profile">
-                <Label>Profile</Label>
-              </Dropdown.Item>
-              <Dropdown.Item id="settings" textValue="Settings">
-                <Label>Settings</Label>
-              </Dropdown.Item>
-              {isBoth ? (
-                <Dropdown.Item id="switch" textValue="Switch role">
-                  <Label>Switch to {otherRole}</Label>
-                </Dropdown.Item>
-              ) : null}
-              <Dropdown.Item id="logout" textValue="Log out" variant="danger">
-                <Label>Log out</Label>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown.Popover>
-        </Dropdown>
+        </AccountDropdown>
       </Navbar.Header>
     </Navbar>
   );

@@ -34,7 +34,7 @@ export function AppShell({
       sidebar={<AppSidebar user={user} />}
       navbar={<AppNavbar user={user} />}
     >
-      <div className="mx-auto w-full max-w-3xl px-6 py-8">{children}</div>
+      <div className="mx-auto w-full max-w-5xl px-6 py-8">{children}</div>
     </AppLayout>
   );
 }

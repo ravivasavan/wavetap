@@ -1,10 +1,12 @@
 "use client";
 
 import { Sidebar } from "@heroui-pro/react";
+import { Avatar, Button } from "@heroui/react";
 import {
   Bell,
   CalendarPlus,
   CalendarRange,
+  ChevronsUpDown,
   Clock,
   Home,
   LayoutList,
@@ -15,6 +17,7 @@ import {
 import { usePathname } from "next/navigation";
 import type { ComponentType } from "react";
 
+import { AccountDropdown, initialsOf } from "./account-menu";
 import type { ShellUser } from "./app-shell";
 
 type NavItem = { href: string; label: string; icon: ComponentType<{ size?: number; strokeWidth?: number }> };
@@ -81,7 +84,24 @@ function SidebarInner({ user }: { user: ShellUser }) {
         </Sidebar.Menu>
       </Sidebar.Content>
       <Sidebar.Footer>
-        <div className="text-muted truncate px-2 py-1 text-xs">{user.email}</div>
+        <AccountDropdown user={user}>
+          <Button
+            variant="ghost"
+            aria-label="Account menu"
+            className="account-trigger flex h-auto w-full items-center justify-start gap-2 rounded-2xl p-2"
+          >
+            <Avatar size="sm">
+              <Avatar.Fallback>{initialsOf(user.displayName, user.email)}</Avatar.Fallback>
+            </Avatar>
+            <span className="account-trigger__meta flex min-w-0 flex-1 flex-col text-left">
+              <span className="text-foreground truncate text-sm font-medium">
+                {user.displayName || user.email}
+              </span>
+              <span className="text-muted truncate text-xs capitalize">{user.activeRole}</span>
+            </span>
+            <ChevronsUpDown size={14} strokeWidth={1.5} className="account-trigger__meta text-muted shrink-0" />
+          </Button>
+        </AccountDropdown>
       </Sidebar.Footer>
     </>
   );
